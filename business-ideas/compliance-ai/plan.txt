@@ -1,0 +1,13 @@
+Compliance AI
+
+Business plan
+Build software that helps companies handle repetitive compliance and governance work faster and with better traceability. Strong use cases include policy review, evidence gathering, vendor due diligence, contract compliance checks, internal control monitoring, regulatory change summaries, and AI governance documentation. Customers are companies in regulated or audit-heavy environments such as fintech, healthcare, SaaS serving enterprises, and companies selling into large procurement processes. Pricing should be annual contracts with premium tiers for integrations, audit logging, and workflow customization.
+
+Our competitive edge
+The edge is confidence, structure, and traceability. Compliance buyers care less about flashy outputs and more about defensible processes. We should design around checklists, evidence trails, policy mappings, reviewer assignments, approval history, and exportable reports. A real advantage would be workflow-specific intelligence, such as knowing how to map vendor responses to internal control frameworks or how to flag missing evidence before an audit. Another edge is connecting multiple systems so compliance work happens in one place instead of scattered spreadsheets and documents.
+
+How to build the product
+Start with one high-friction workflow like vendor security review or audit evidence collection. Build ingestion for documents, questionnaires, screenshots, policies, and system records. Use LLMs to extract structure, summarize gaps, draft responses, and map evidence to specific controls. Keep a human reviewer in the loop and make every conclusion traceable back to source evidence. The product should have dashboards for open tasks, due dates, missing artifacts, and approval steps. Over time we can add more frameworks and adjacent compliance workflows.
+
+How to launch with the best chance of succeeding
+Launch where compliance pain is constant and under-resourced, especially in mid-market companies that cannot hire large compliance teams. The fastest route is to solve one expensive recurring event like annual audits, customer security questionnaires, or vendor risk reviews. Sell to heads of compliance, security, legal operations, or finance depending on the wedge. Offer a pilot with clearly scoped deliverables and a measurable reduction in preparation time. Position the product as a force multiplier for the existing team, not as a replacement for judgment.
