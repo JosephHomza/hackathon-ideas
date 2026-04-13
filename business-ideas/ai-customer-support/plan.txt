@@ -1,0 +1,13 @@
+AI Customer Support
+
+Business plan
+Build software that helps support teams resolve tickets faster and more accurately. The strongest version combines automated triage, suggested replies, knowledge retrieval, workflow routing, and partial or full auto-resolution for repetitive requests. The target customers should be mid-market B2B software companies, ecommerce brands, fintech operations teams, or marketplaces that already spend heavily on support labor. The revenue model should combine a platform fee with usage-based pricing tied to ticket volume or successful resolutions. The business case is straightforward: lower support cost, shorter response times, and better customer satisfaction.
+
+Our competitive edge
+The edge is reliable workflow performance instead of generic chatbot behavior. Most companies do not want another chat widget. They want fewer tickets, fewer escalations, cleaner routing, and more predictable service quality. We can differentiate by integrating deeply with systems like Zendesk, Intercom, HubSpot, Salesforce, Shopify, or internal admin tools. Strong analytics, approval controls, audit logs, and domain-tuned playbooks are key. Another edge is building AI around real support operations, including macros, refund rules, escalation logic, and knowledge freshness.
+
+How to build the product
+The first product should ingest knowledge sources, past tickets, macros, and product documentation. Build features for ticket classification, intent detection, reply drafting, retrieval with citations, and routing recommendations. Then add safe automation for low-risk flows such as order status, password resets, account updates, refund eligibility checks, and policy lookups. Make human override easy. The admin side should include confidence thresholds, approval queues, analytics dashboards, and policy configuration. Keep the model layer flexible so we can swap providers or add cheaper models for simpler tasks.
+
+How to launch with the best chance of succeeding
+Start with one support-heavy niche rather than every support team on earth. Sell directly to heads of support and operations who already feel the cost pain. Offer a pilot that measures average handle time, first-response time, deflection rate, and CSAT impact. Use the pilot to prove operational savings within the first month. Keep the initial product focused on email and ticket support before moving into voice or live chat. The best launch wedge is a painful queue with obvious ROI, not a general AI assistant story.
