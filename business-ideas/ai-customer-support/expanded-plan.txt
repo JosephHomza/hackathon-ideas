@@ -1,0 +1,148 @@
+AI Customer Support Expanded Plan
+
+Goal
+Build a business that uses AI to reduce support cost, speed up response time, and improve resolution quality without making support teams lose control. The best version is not a chatbot. It is a workflow product that helps a real support team do more with less risk.
+
+Plan A: Mid-market B2B SaaS support copilot
+
+Target customer
+Mid-market SaaS companies with 20 to 200 support agents, meaningful ticket volume, and a help desk already powered by Zendesk, Intercom, or Salesforce Service Cloud.
+
+Core problem
+These teams are overloaded by repetitive tickets, inconsistent answers, slow internal knowledge lookup, and too much time spent on routing and drafting. Leadership wants lower cost per ticket and faster first response time without hurting CSAT.
+
+Product wedge
+Start as an AI copilot that drafts replies, summarizes threads, classifies intent, recommends routing, and cites the source policy or help article. The wedge should be narrow: agent assist for email and ticket support, not full automation on day one.
+
+Pricing idea
+Charge a platform fee plus usage. Example: $1,500 to $5,000 per month base fee, then a per-agent or per-ticket usage layer. Keep the first offer simple, such as a 30-day pilot for a fixed fee and a paid rollout after measured savings.
+
+Competitive edge
+Win by being operationally useful rather than flashy. The edge is better ticket context, deep integration with existing help desks, guardrails, approval workflows, and metrics that show time saved. The product should feel like a support operator built the workflow, not a generic AI wrapper.
+
+MVP scope
+Build only what reduces real work:
+1. Knowledge ingestion from docs, macros, help center content, and prior tickets.
+2. Reply drafting with tone controls and citations.
+3. Ticket classification and routing recommendations.
+4. Confidence scores and human approval before sending.
+5. Basic dashboard for deflection, resolution time, and agent time saved.
+
+Go-to-market
+Sell directly to heads of support, support ops, and COO-level buyers at companies already paying for help desk software. Use outbound targeting companies with visible hiring in support, long response times, or large public help centers. The message should be ROI-first: cut handling time, reduce escalations, and improve consistency.
+
+Launch steps
+1. Interview 15 to 25 support leaders to identify the most repetitive ticket categories.
+2. Choose one help desk integration first, ideally Zendesk or Intercom.
+3. Ship a pilot that handles one or two ticket classes only.
+4. Measure time saved, escalation rate, and quality before expanding scope.
+5. Convert pilots into annual contracts only after proving a strong operational lift.
+
+Risks
+The biggest risks are trust, hallucinations, weak integration, and long sales cycles. If the product feels unsafe, the buyer will not let it touch production. If the integration is shallow, the team will not adopt it. If the model tries to do too much, quality drops.
+
+Why it might win
+This is the safest path because the pain is obvious and the ROI is measurable. Support budgets already exist, the use case is easy to explain, and mid-market SaaS buyers can move faster than enterprise. If the product saves even a few minutes per ticket, the business case becomes real quickly.
+
+Plan B: E-commerce and marketplace support automation
+
+Target customer
+E-commerce brands, DTC companies, and marketplaces with high ticket volume from order status, returns, refunds, shipping issues, account problems, and policy questions.
+
+Core problem
+These businesses receive a flood of repetitive questions that can often be resolved automatically if the system can safely read order data, shipment data, and policy rules. Support teams spend too much time on basic lookups and repetitive workflows.
+
+Product wedge
+Start with automation for the top repetitive requests: order status, return eligibility, cancellation status, shipping updates, and refund policy checks. The wedge is not a general AI agent. It is a resolution engine for a narrow set of high-volume support flows.
+
+Pricing idea
+Charge based on ticket volume or successful automations. Example: $0.20 to $1.50 per automated resolution, or a monthly tier based on order volume and support contacts. Include a small platform fee for access to the workflow engine and integrations.
+
+Competitive edge
+The edge is direct access to commerce data and policy logic. Generic chat tools do not know inventory, shipping status, SKU rules, or refund exceptions. If the product can safely connect to Shopify, order management, shipping providers, and returns platforms, it becomes much more valuable than a generic chatbot.
+
+MVP scope
+Build a narrow but production-ready system:
+1. Shopify and help desk integration.
+2. Order lookup and status responses.
+3. Refund and return eligibility logic.
+4. Preapproved response templates with safe automation.
+5. Human handoff for edge cases and angry customers.
+
+Go-to-market
+Sell to DTC operators, support leads, and founders at brands with clear support pain. The best outreach targets businesses with high shipping volume, lots of repeat buyers, or frequent seasonal spikes. Position the product as cost reduction plus faster customer satisfaction, not as AI experimentation.
+
+Launch steps
+1. Pick one commerce platform and one help desk.
+2. Build one killer flow, such as order status plus return eligibility.
+3. Offer a fast pilot using real tickets.
+4. Prove deflection and lower response time in under 30 days.
+5. Expand into additional workflows only after the first use case is trusted.
+
+Risks
+This segment can churn if support automation is brittle or if policy changes are frequent. Refund logic and customer trust make mistakes expensive. Another risk is that many buyers expect fast results and do not tolerate long implementation.
+
+Why it might win
+The customer pain is immediate and high volume. Even small savings can create meaningful ROI because ticket counts are large. The winner here can become deeply embedded in operational workflows, especially if it learns policies and order logic over time.
+
+Plan C: Internal AI support platform for regulated or complex operations
+
+Target customer
+Fintechs, healthtech companies, insurance ops teams, logistics firms, and other businesses where support work is tied to regulated data, exception handling, or complex internal procedures.
+
+Core problem
+These teams cannot safely use a generic chatbot because they need accuracy, auditability, role-based access, and decision trails. Support agents often search across policy docs, internal tools, and case notes while trying to answer complex customer requests.
+
+Product wedge
+Start as an internal support copilot that retrieves policy-backed answers, summarizes cases, and guides agents through structured workflows. The wedge should focus on compliance-safe assistance and case resolution, not customer-facing automation.
+
+Pricing idea
+Price as an enterprise workflow platform. Example: annual contracts starting around $30,000 to $100,000+ depending on seats, integrations, and compliance requirements. Offer paid implementation services if the customer needs custom workflows.
+
+Competitive edge
+The edge is trust, security, and auditability. A strong product here should have permissioning, evidence links, approvals, logging, and configurable policies. This is less about raw model quality and more about turning AI into a controlled decision layer for sensitive support operations.
+
+MVP scope
+Keep the first release narrow:
+1. Document and policy retrieval with citations.
+2. Case summarization and next-best-action guidance.
+3. Role-based access control and audit logs.
+4. Admin controls for approved answers and escalation rules.
+5. Integrations with one or two internal systems.
+
+Go-to-market
+Target operations leaders, compliance-minded support leaders, and transformation teams. Use warm intros, founder-led selling, and tightly scoped pilots. Buyers here need proof that the product reduces work without increasing risk, so credibility matters more than scale.
+
+Launch steps
+1. Select one regulated vertical and one use case.
+2. Map the current support workflow and escalation process.
+3. Build a manual pilot before building full automation.
+4. Show measurable gains in resolution quality and audit readiness.
+5. Expand only after the internal champion trusts the system.
+
+Risks
+Sales cycles are slower, integration work is heavier, and security expectations are higher. If the company is too early, it may spend too long building custom features before reaching product-market fit. The product must balance flexibility with strict control.
+
+Why it might win
+This path is harder, but it can produce stickier and higher-value contracts. Regulated businesses pay for reliability, and once integrated, the product can become hard to replace. If the team can build trust and handle complexity, the moat can be strong.
+
+Founder recommendation
+
+If the goal is the highest chance of success, start with Plan A unless you already have direct access to e-commerce or regulated buyers. Plan A has the cleanest combination of pain, ROI, and sales motion. Plan B can win faster if you have commerce distribution or a Shopify-heavy network. Plan C is the highest-value path but also the hardest and slowest.
+
+Execution principles
+1. Sell the workflow, not the AI.
+2. Start with one painful use case.
+3. Measure savings in time, cost, or deflection.
+4. Keep a human in the loop until trust is earned.
+5. Do not expand before the first wedge is working in production.
+
+Practical 90-day approach
+1. Days 1 to 15: interview buyers, map pain, and choose one wedge.
+2. Days 16 to 30: build the narrow MVP and one integration.
+3. Days 31 to 45: run pilots on real tickets and collect metrics.
+4. Days 46 to 60: fix failures, improve confidence, and tighten UX.
+5. Days 61 to 90: convert pilot users into paying customers and prepare a repeatable sales pitch.
+
+Best chance of success
+The best chance of success comes from choosing a narrow wedge, charging early, and proving measurable savings. A support business wins when it removes enough work that the buyer feels the value within weeks, not months.
