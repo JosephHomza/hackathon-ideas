@@ -1,0 +1,13 @@
+AI Software Engineering Tools
+
+Business plan
+Build a product that makes software teams ship faster with less risk. The most promising wedges are code review assistants, test generation, migration tooling, incident debugging support, security-aware pull request analysis, or internal developer copilots for enterprise codebases. Customers are engineering teams that already spend heavily on developer time and can justify tooling if it reduces cycle time or defects. Pricing can be per developer, per repository, or enterprise annual contracts for internal deployment and governance features.
+
+Our competitive edge
+The market is crowded, so the edge has to be specific. We should avoid competing head-on as another general code chatbot. Instead, we can focus on one painful slice like legacy migration, test coverage improvement, review enforcement, regulated engineering workflows, or secure code change analysis. The moat comes from fitting into real engineering systems: GitHub, GitLab, CI, issue trackers, internal docs, and policy rules. Teams also care about privacy, auditability, and false-positive control, which creates room for a more disciplined product.
+
+How to build the product
+Choose one engineering pain point with a short feedback loop. For example, a pull request reviewer that flags risky changes, suggests targeted tests, and explains why the change may break behavior. Build a service that ingests diffs, repository context, test metadata, and issue references. Return structured comments, risk scores, and fix suggestions. Add repo-level configuration so teams can tune behavior. For enterprise readiness, build permission handling, logging, and clear opt-in controls. Avoid trying to solve every engineering problem in v1.
+
+How to launch with the best chance of succeeding
+Launch through small engineering teams that feel delivery pressure and are open to tooling experiments. The easiest motion is bottom-up with one technical champion, followed by a team-wide rollout once value is visible. Offer a pilot on a small number of repositories and show concrete metrics like review time saved, escaped bug reduction, test improvements, or migration speed. Content marketing can work here if it is technical and credible, but the fastest initial traction usually comes from founder networks, OSS communities, and developer leaders who already have a known pain point.
