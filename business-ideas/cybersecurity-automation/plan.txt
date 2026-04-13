@@ -1,0 +1,13 @@
+Cybersecurity Automation
+
+Business plan
+Build software that reduces the manual burden inside security operations. Strong wedges include alert triage, phishing investigation, identity anomaly response, vendor risk review, evidence collection for compliance, or vulnerability remediation workflows. Customers are companies with growing security requirements but limited analyst bandwidth. The business value is immediate because security teams are overwhelmed, labor is expensive, and failure is costly. Pricing should reflect workflow volume, asset count, or annual security program value rather than simple seats.
+
+Our competitive edge
+The edge is trust and operational usefulness. Security teams are skeptical of vague AI claims, so we need explainable outputs, strong audit trails, configurable policy rules, and very low tolerance for silent failure. We can compete by focusing on one workflow where triage quality and time savings are easy to measure. Another advantage is integration density: email systems, identity providers, SIEMs, endpoint tools, ticketing systems, and cloud logs. If the product helps analysts close real work faster without hiding evidence, it becomes sticky.
+
+How to build the product
+Start with one workflow, such as phishing triage. Build ingestion from email reports and security tooling, then classify, enrich, summarize, and recommend actions. Every output should include evidence and confidence. Add human approval for all high-risk actions at the beginning. The system should store cases, decisions, and resolution times so customers can review performance and improve rules. Once the first workflow is reliable, expand into related automations like access reviews or vuln ticket prioritization. Security products need careful permissions, tenant isolation, and detailed logs from day one.
+
+How to launch with the best chance of succeeding
+Go after mid-market security teams with real operational pain and limited headcount. Sell the product as analyst leverage, not as fully autonomous security. The first motion should be narrow pilots tied to one workflow and one success metric, like percent of phishing reports auto-triaged or average analyst time saved per case. Use security credibility in all messaging: technical depth, clear boundaries, and operational safety. Reference customers, technical writeups, and proof of evidence handling matter more here than flashy demos.
