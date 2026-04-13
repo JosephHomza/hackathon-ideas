@@ -1,0 +1,135 @@
+Vertical AI Workflow Business Plan
+
+Goal
+Build a focused AI workflow company that solves one expensive, repetitive, and operationally ugly business process better than generic AI tools. The business should win by being specific, measurable, and embedded in how the customer already works.
+
+Founding principle
+The most likely path to success is not broad AI platform software. It is a narrow, high-value workflow where the buyer already feels pain, the output is easy to measure, and the product can become part of daily operations. The company should pick one wedge, prove value, then expand sideways into adjacent workflows for the same buyer.
+
+Plan A: Insurance Claims and Appeals Workflow
+
+Target customer
+Small to mid-sized insurance agencies, third-party administrators, healthcare billing teams, and specialty claims operations that handle dense paperwork, appeals, and exception-heavy cases.
+
+Core problem
+Staff spend too much time reading documents, extracting facts, preparing appeal packages, tracking deadlines, and re-entering data across multiple systems. Errors cause delayed payouts, rejected claims, and staff burnout.
+
+Product wedge
+An AI claims and appeals assistant that ingests claim files, policy documents, denial letters, and correspondence, then drafts appeal packets, extracts key facts, creates task checklists, flags missing documents, and tracks deadlines.
+
+Pricing idea
+Start with a workflow-based subscription. Example: $1,500 to $5,000 per month per team, or usage-based pricing per case or appeal packet. Offer a paid pilot, then convert to annual contracts with implementation fees.
+
+Competitive edge
+The edge comes from process depth and exception handling. Generic AI can summarize documents, but this product understands the structure of claims, timelines, required attachments, and common rejection reasons. Over time, the system gets better at the exact failure modes that matter.
+
+MVP scope
+Build one intake flow, one document parser, one draft generator, and one approval loop. Support uploads from PDF, email, and scanned files. Include deadline tracking, simple templates, reviewer edits, and export to the customer's existing tools. Do not try to automate every claim type in version one.
+
+Go-to-market
+Sell founder-led to small operators first. Use direct outreach to claims teams, billing managers, and agency owners. Target niche associations, LinkedIn, and referrals from service providers. Lead with measurable ROI such as faster turnaround, fewer missed deadlines, and reduced manual review time.
+
+Launch steps
+1. Interview 15 to 25 operators and map the workflow in detail.
+2. Choose one claim or appeal type with frequent repetition and clear pain.
+3. Build a manual first version if needed to validate demand.
+4. Pilot with 3 to 5 design partners and charge for the pilot.
+5. Measure time saved, error reduction, and recovery speed.
+6. Turn the best-performing workflow into a repeatable product.
+
+Risks
+Regulatory complexity, document variability, and trust barriers can slow adoption. Sales cycles may be longer than expected if the buyer is highly regulated. If the workflow is too broad, the product can become a generic document tool and lose focus.
+
+Why it might win
+This workflow is painful, recurring, and tied to direct economic value. If the product reduces denied claims, speeds collections, or lowers labor cost, the buyer can justify the spend quickly. Once embedded, switching costs rise because the product becomes part of a critical business process.
+
+Plan B: Construction Permitting and Project Administration Workflow
+
+Target customer
+Construction firms, design-build contractors, developers, architects, and permit expeditors that handle permit packages, municipal submissions, revisions, and compliance paperwork.
+
+Core problem
+Teams waste time assembling permit documents, checking local requirements, responding to redlines, and managing back-and-forth with municipalities. Delays stall projects, increase carrying costs, and hurt revenue recognition.
+
+Product wedge
+An AI permitting copilot that creates permit package checklists, drafts application forms, reviews submittals for completeness, tracks permit status, summarizes city feedback, and routes revisions to the right person.
+
+Pricing idea
+Charge by project, permit package, or active seat. Example: $500 to $2,500 per project bundle for smaller firms, or a $2,000 to $8,000 monthly subscription for larger firms with multiple concurrent jobs. Add premium pricing for multi-location rollout.
+
+Competitive edge
+The advantage is localized knowledge. Permitting is fragmented by city, county, and project type. A product that learns local submission patterns, required documents, and typical rejection reasons can outperform generic AI and generic project management software.
+
+MVP scope
+Start with one geography and one permit class. Build document checklists, application drafting, redline summarization, status tracking, and collaboration notes. Focus on reducing missing paperwork and rework. Keep deep integrations light until the workflow is proven.
+
+Go-to-market
+Target permit expeditors and operations managers first because they feel the pain every day. Use direct sales, industry referrals, and partnerships with local design and engineering firms. Publish before-and-after examples showing fewer resubmissions and faster approvals.
+
+Launch steps
+1. Pick one city or county where permit pain is high.
+2. Interview firms that submit permits every week.
+3. Capture the most common redlines, missing fields, and delays.
+4. Build a narrow tool for one permit path.
+5. Pilot with firms that have active projects.
+6. Expand to adjacent permit types only after repeat usage.
+
+Risks
+Municipal variation can make the product harder to scale. Manual exceptions can be frequent, especially on unusual jobs. If the company tries to cover too many jurisdictions too early, maintenance becomes expensive and the product may never feel reliable.
+
+Why it might win
+The pain is tied to project delays, which are expensive and visible. If the product shortens cycle time or reduces resubmission loops, the ROI is easy to prove. It also has good upsell potential because each new city or project type increases the product's utility.
+
+Plan C: Logistics Exception Handling and Operations Workflow
+
+Target customer
+Freight brokers, third-party logistics providers, warehouse operations teams, and supply chain coordinators who deal with shipment exceptions, claims, late deliveries, and customer updates.
+
+Core problem
+Exception handling is messy and repetitive. Teams monitor inboxes, track delayed shipments, chase carriers, update customers, and document issues across multiple systems. The work is urgent, low-leverage, and often done manually.
+
+Product wedge
+An AI logistics operations assistant that reads shipment updates, identifies exceptions, drafts customer communications, creates internal tasks, summarizes carrier notes, and recommends next actions based on the event type.
+
+Pricing idea
+Charge by shipment volume, active lane, or operations seat. Example: $1,000 to $10,000 per month depending on scale, with pricing tied to exception volume or automated case handling. A usage-based model can align well with customer value.
+
+Competitive edge
+The product wins by reducing chaos and improving response time. It should understand the operational language of logistics, the common exception patterns, and the systems already used by the team. Over time, the dataset of exception outcomes becomes a strong advantage.
+
+MVP scope
+Start with one workflow: delayed shipment exception handling. The MVP should ingest updates, classify exception types, generate responses, assign tasks, and keep a simple audit trail. Integrate with email and one or two core systems before expanding.
+
+Go-to-market
+Sell to operations leaders who feel the daily pain of exception volume. Use pilot programs with brokers or 3PLs that have enough shipment flow to see results quickly. Lead with faster response times, lower customer churn, and reduced manual work.
+
+Launch steps
+1. Interview operators who manage exceptions all day.
+2. Map the most common event types and response patterns.
+3. Build a lightweight assistant around one exception class.
+4. Prove that the system reduces response time and missed follow-up.
+5. Expand to more exception types and more carrier channels.
+6. Turn proven playbooks into reusable automation rules.
+
+Risks
+The product can get pulled into too many edge cases. Integrations with legacy transportation tools may be annoying. Buyers may want reliability before sophistication, so the product must be accurate and operationally simple.
+
+Why it might win
+This is a high-frequency workflow with clear time pressure and direct service quality impact. If the tool helps teams respond faster and reduces missed updates, the customer sees immediate value. It can also expand into adjacent operations workflows after the first use case works.
+
+Founder Decision Framework
+
+How to choose among A, B, and C
+Pick the path where you have the strongest access to customers, the clearest daily pain, and the easiest proof of ROI. The best idea is usually not the one with the largest market on paper. It is the one where you can get 3 to 5 paying design partners quickly and build around a workflow that repeats every day.
+
+Recommendation order if the goal is highest probability of early revenue
+1. Plan A if you already know regulated operations, billing, or claims workflows.
+2. Plan C if you have access to logistics, freight, or warehouse operators.
+3. Plan B if you have strong local relationships in construction or permitting.
+
+What to avoid in all three plans
+Do not start by building a broad AI platform. Do not promise full autonomy on day one. Do not target every industry at once. Do not build without workflow interviews and live examples. Do not skip human review in the first version.
+
+Best chance of success
+The highest-probability version is the one that starts narrow, charges early, and proves it can save time or increase revenue in a workflow the buyer already cares about. The product should be boring in the best possible way: reliable, specific, and obviously useful.
+
