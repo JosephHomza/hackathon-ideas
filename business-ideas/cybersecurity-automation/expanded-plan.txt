@@ -1,0 +1,136 @@
+Cybersecurity Automation Expanded Plan
+
+Goal
+Build a cybersecurity automation company that reduces analyst workload, shortens response time, and helps security teams close real operational work with less headcount.
+
+Plan A: Phishing Triage and User-Reported Email Automation
+Target customer
+Mid-market companies with 200 to 5,000 employees, a small security team, Microsoft 365 or Google Workspace, and a steady stream of user-reported emails.
+
+Core problem
+Security teams waste time sorting false alarms, validating suspicious emails, deciding whether a message is malicious, and manually coordinating takedowns or user guidance.
+
+Product wedge
+An inbox-centered phishing triage assistant that ingests user-reported emails, classifies risk, extracts indicators, checks sender and domain reputation, drafts analyst recommendations, and prepares response actions for approval.
+
+Pricing idea
+Charge by protected employee count or monthly reported email volume. A practical starting point is a low base platform fee plus usage tiers, such as per 1,000 reported messages or per 500 employees.
+
+Competitive edge
+This wedge is easy to explain, easy to measure, and easy to prove. Time saved per ticket, false-positive reduction, and faster response to real threats are concrete outcomes. It also builds trust because analysts can see evidence, confidence, and recommended actions before anything is sent.
+
+MVP scope
+Support email ingestion, URL and attachment scanning, basic sender reputation checks, domain similarity detection, LLM-generated summaries, analyst approval workflow, case history, and export to the ticketing system.
+
+Go-to-market
+Sell to security managers and IT ops leaders who already feel pain from reported email volume. Lead with time savings, reduced backlog, and lower analyst fatigue. Use a short pilot that proves response time improvement in 30 days.
+
+Launch steps
+1. Build the email intake and classification flow.
+2. Add evidence display and analyst approval.
+3. Integrate with Microsoft 365 and one ticketing system.
+4. Run 3 to 5 design-partner pilots.
+5. Turn pilot metrics into a repeatable sales story.
+
+Risks
+This market is crowded, and buyers may compare you with large email security vendors. If the product feels generic or hides evidence, trust will break quickly. Detection quality must be good enough to be useful but does not need to be perfect on day one if analyst review is strong.
+
+Why it might win
+It solves a daily pain with a narrow workflow, has fast ROI, and creates a strong habit loop inside the security team.
+
+Plan B: Identity and Access Risk Automation
+Target customer
+Companies with distributed workforces, many SaaS tools, frequent employee changes, and weak identity governance. Best fit is mid-market and lower-enterprise security or IT teams.
+
+Core problem
+Teams struggle to monitor risky logins, stale access, privilege creep, offboarding gaps, MFA exceptions, and unusual access patterns across many tools.
+
+Product wedge
+An identity risk cockpit that watches user activity, flags anomalies, recommends access changes, opens tickets for approvals, and automates periodic access reviews.
+
+Pricing idea
+Price per employee, per application connected, or per identity event volume. A simpler version is a platform fee plus a per-seat or per-app tier once customers connect more than a few systems.
+
+Competitive edge
+The edge is operational coverage. Most teams have identity data scattered across tools, and access decisions are slow because the evidence is fragmented. If you unify alerts, approvals, and audit history in one place, the product becomes a control layer instead of another dashboard.
+
+MVP scope
+Connect Microsoft Entra, Okta, Google Workspace, and one or two critical SaaS tools. Support risky login detection, dormant account flags, access review campaigns, approval routing, and audit logs. Include policy templates for common identity rules.
+
+Go-to-market
+Sell to organizations already worried about compliance, insider risk, or audit readiness. Position the product as a way to reduce access review pain and close identity hygiene gaps before an audit or incident exposes them.
+
+Launch steps
+1. Choose one identity platform to support deeply first.
+2. Ship access review workflows and approval routing.
+3. Add anomaly alerts with explainable evidence.
+4. Pilot with companies that recently failed or struggled with access reviews.
+5. Package audit-ready reports and success metrics.
+
+Risks
+Identity tooling is adjacent to large, established vendors. Integration quality and trust matter more than feature count. If the product does not save enough time or produce cleaner audit evidence, it may be treated as a nice-to-have.
+
+Why it might win
+Compliance pressure and workforce complexity create consistent demand. A product that makes access reviews and identity governance easier can become deeply embedded.
+
+Plan C: Security Operations Copilot for Small Teams
+Target customer
+Small and midsize security teams that need broad help across alerts, investigations, ticket writing, and remediation but cannot afford a large SIEM or SOC automation program.
+
+Core problem
+Analysts spend too much time reading logs, stitching together evidence, documenting investigations, and turning messy incident data into clear actions.
+
+Product wedge
+A security operations copilot that ingests alerts from multiple tools, enriches them, clusters duplicates, drafts investigation summaries, suggests next steps, and turns findings into tickets and reports.
+
+Pricing idea
+Price by alert volume, connected data sources, or analyst seats with a platform minimum. A practical early model is a pilot fee that converts into annual software plus usage if the team sees measurable value.
+
+Competitive edge
+The strongest edge is workflow compression. If you can reduce the number of manual touches required to resolve an alert, you create clear efficiency gains. A good copilot also becomes sticky because it learns the teamâ€™s environment and preferred response patterns.
+
+MVP scope
+Support one or two alert sources, normalization, duplicate clustering, enrichment from threat intel and asset inventory, summary generation, ticket creation, and human-in-the-loop approval for all suggested actions.
+
+Go-to-market
+Target small security teams that already have tooling but no time. Position the product as an analyst multiplier, not a replacement SOC. The sales motion should be technical, with clear demos and concrete before-and-after examples.
+
+Launch steps
+1. Pick a narrow alert source such as endpoint detections or cloud alerts.
+2. Build alert summarization and evidence collection.
+3. Add ticket creation and remediation task generation.
+4. Test with one design partner that has a real backlog.
+5. Measure reduction in time-to-triage and analyst touches per alert.
+
+Risks
+This is the broadest and most ambitious path, so it can drift into a generic AI security platform if the wedge is not tight. It also risks overpromising if the automation handles too many cases too early.
+
+Why it might win
+If it works, it becomes a high-value layer across many security workflows. Teams want fewer dashboards and more action, and a strong copilot can become the daily operating layer.
+
+Founder Recommendation
+Best first bet: Plan A. It is the easiest to explain, the fastest to pilot, and the clearest to measure. If you need a wider platform later, expand from phishing triage into identity risk and then into broader security operations.
+
+Decision Filters
+Choose the plan that gives you the best combination of:
+1. Fast customer access.
+2. Clear pain that happens every week.
+3. Measurable time savings.
+4. A workflow narrow enough to ship in 8 to 12 weeks.
+5. A market willing to pay for trust, not just novelty.
+
+Practical 90-day approach
+Days 1 to 15
+Talk to 10 security leaders and confirm the top recurring pain. Pick one wedge only.
+
+Days 16 to 30
+Build the first usable workflow with evidence, approval, and logging. Do not overbuild platform features.
+
+Days 31 to 60
+Run pilots, measure time saved, and tighten the workflow around real analyst behavior.
+
+Days 61 to 90
+Convert the best pilot into a paid contract, write a short case study, and use the result to open the next 3 to 5 accounts.
+
+What to avoid
+Do not start as a vague "AI for cybersecurity" company. Do not remove human approval early. Do not market autonomy before trust. Do not try to support every security tool on day one.
