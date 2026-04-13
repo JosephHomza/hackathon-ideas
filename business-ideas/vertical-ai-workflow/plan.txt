@@ -1,0 +1,13 @@
+Vertical AI Workflow Software
+
+Business plan
+Build a narrowly scoped AI product for one painful workflow in one industry. The best version of this business is not "AI for everyone." It is something like insurance appeals automation, permit package drafting for construction firms, intake and document prep for small law firms, or freight exception handling for logistics teams. The company sells on measurable business outcomes such as hours saved, cycle time reduction, lower error rates, or faster revenue capture. Pricing should be B2B SaaS with either seat-based pricing for smaller teams or workflow-volume pricing for larger customers. The first goal is not scale across many industries. The first goal is total usefulness inside one workflow where the pain is constant and budgets already exist.
+
+Our competitive edge
+The edge comes from depth, not breadth. We win by understanding the exact workflow, decision points, exceptions, compliance needs, and language used by one niche better than generic AI tools do. The product should include templates, business rules, validation checks, integrations with the tools that niche already uses, and human review checkpoints. That creates a workflow moat. Over time the moat gets stronger as we collect anonymized patterns, build better playbooks, and learn the failure modes that generic competitors miss.
+
+How to build the product
+Start by interviewing 15 to 30 operators in one industry and map the workflow step by step. Pick the workflow with the highest pain, repeat frequency, and willingness to pay. Build a simple web app with file upload, structured extraction, a task queue, draft generation, approval steps, and export to the systems customers already use. Keep the first version narrow: one workflow, a few document types, and a human-in-the-loop review model. Use proven APIs for OCR, LLM reasoning, and document storage rather than building models from scratch. Instrument everything. Track where outputs fail, where humans edit, and where approvals stall. Those observations should drive the second and third versions.
+
+How to launch with the best chance of succeeding
+Do not launch broadly. Start with 3 to 5 design partners in one niche and charge early, even if pricing is discounted. Position the product around labor savings and turnaround time, not around "AI innovation." Offer white-glove onboarding and personally help configure the workflow. The launch strategy should be founder-led sales through direct outreach, niche associations, industry groups, and warm introductions. Publish case studies with hard numbers as soon as possible. Once one niche is working, expand into adjacent workflows for the same buyer before moving into a second industry.
