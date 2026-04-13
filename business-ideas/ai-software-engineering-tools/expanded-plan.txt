@@ -1,0 +1,46 @@
+AI Software Engineering Tools - Expanded Plan
+
+Goal
+Build a software engineering product that is narrow enough to win, valuable enough to pay for quickly, and easy enough to adopt without forcing a huge platform change. The best strategy is to start with one painful workflow, prove measurable ROI, and expand from there.
+
+Plan A - AI PR Reviewer for High-Risk Codebases
+Target customer: Small to mid-sized engineering teams shipping production software, especially teams with 5-50 engineers, regulated products, or high bug costs.
+Core problem: Review time is slow, senior engineers are overloaded, risky changes slip through, and teams lack a consistent standard for code quality.
+Product wedge: A pull request reviewer that flags risky diffs, points to missing tests, checks policy and security issues, and gives concise human-readable explanations inside GitHub or GitLab.
+Pricing idea: Per developer seat for self-serve teams, then annual enterprise pricing for larger orgs with compliance, audit logs, and private deployment.
+Competitive edge: Focus on precision, not broad chatbot behavior. Win by being opinionated, configurable, and deeply integrated into pull request workflows, not by trying to replace engineers.
+MVP scope: GitHub app, diff analysis, risk scoring, test suggestions, policy checks, comment posting, repository-level rules, simple dashboard, and manual feedback controls for false positives.
+Go-to-market: Start with technical founders, seed-stage teams, devtool communities, and teams already feeling pain from slow review cycles. Use demos that show fewer review comments, faster merges, and fewer escaped defects.
+Launch steps: Build one integration first, ship on a single repo type, recruit 5-10 design partners, measure review cycle time before and after, publish a few clear case studies, then expand to more repos and enterprise features.
+Risks: Tool fatigue, false positives, trust issues, and crowded competition from generic AI coding tools.
+Why it might win: It solves a daily pain with clear ROI, is easy to understand, and can become sticky once a team trusts its judgment.
+
+Plan B - AI Test Generation and Failure-Finding Assistant
+Target customer: Product engineering teams with weak test coverage, legacy codebases, or frequent regressions, especially teams with CI pain and large untested areas.
+Core problem: Writing useful tests is tedious, many teams under-invest in testing, and regressions are expensive to find after release.
+Product wedge: A tool that inspects code changes and generates targeted unit, integration, and regression tests, then explains which behaviors are most at risk and why.
+Pricing idea: Usage-based pricing tied to generated test runs or per repository, with a team plan for steady monthly usage and enterprise tiers for private model handling.
+Competitive edge: Instead of generic code completion, the product is optimized for test quality, repo context, and failure reproduction. It should learn from CI results and improve over time.
+MVP scope: Repo indexing, diff-aware test suggestions, one-click test file generation, CI failure explanation, coverage gap detection, and support for one or two major languages first.
+Go-to-market: Sell to teams that already care about quality and ship often, then land through an initial repo or one painful service. Developers should feel the value the first time a flaky or broken area gets a good test.
+Launch steps: Pick one stack, support one CI provider, prove that generated tests catch real bugs, bundle examples into a strong before-and-after demo, then add support for more languages and frameworks.
+Risks: Generated tests can be brittle or low value, users may distrust auto-written test code, and language/framework coverage can expand too slowly.
+Why it might win: The ROI is obvious when it prevents a production bug or saves senior engineer time, and test debt is a universal problem across many codebases.
+
+Plan C - AI Migration and Refactoring Copilot for Legacy Code
+Target customer: Teams maintaining older codebases that need framework upgrades, cloud migration, monolith decomposition, dependency updates, or API changes.
+Core problem: Legacy work is high-value but slow, dangerous, and often avoided because the path is unclear and the risk of breakage is high.
+Product wedge: A guided refactoring assistant that maps dependencies, proposes a safe sequence of changes, drafts migration patches, and highlights breaking-risk hotspots before code is touched.
+Pricing idea: High-value enterprise pricing, project-based pricing for migrations, or annual contracts tied to modernization initiatives and engineering efficiency budgets.
+Competitive edge: The product should help teams complete work they already know they must do, rather than inventing new work. It wins by reducing risk, sequencing migrations, and preserving context.
+MVP scope: Codebase mapping, dependency graph generation, migration plan output, automated patch drafts for one common migration type, risk annotations, rollback guidance, and change tracking.
+Go-to-market: Target companies actively modernizing systems, especially those with obvious deadlines like vendor end-of-life, cloud cost pressure, or security requirements. Sell to engineering leaders, platform teams, and consultants.
+Launch steps: Choose one migration path first, such as framework version upgrades or library replacements, produce a concrete case study, build a strong manual-assisted service offering, then productize the repeatable parts.
+Risks: Longer sales cycles, higher implementation complexity, and the need for deep trust before the product can act on code.
+Why it might win: Legacy modernization is painful, expensive, and budgeted. If the product de-risks a project that would otherwise stall, buyers can justify a high price.
+
+Recommendation
+If the goal is fastest path to early revenue, Plan A is the best starting point. If the goal is a more defensible technical moat and a broader long-term platform, Plan C can become very valuable, but it is harder to launch. Plan B sits in the middle: strong value, easy to understand, but it needs excellent execution to avoid becoming another average code assistant.
+
+Practical founder rule
+Start with the plan that gives you the shortest path to a paying customer, the simplest proof of value, and the smallest product surface area. Build one sharp wedge, measure the before-and-after effect, and expand only after the first use case is undeniably working.
