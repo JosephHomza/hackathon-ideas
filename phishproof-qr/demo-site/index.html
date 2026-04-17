@@ -22,7 +22,7 @@
           <a class="secondary-button" href="#story">Why it matters</a>
         </div>
       </div>
-        <div class="hero-card">
+      <div class="hero-card">
         <div class="hero-card-label">Demo focus</div>
         <ul>
           <li>Scan QR codes with the iPhone camera</li>
@@ -68,8 +68,23 @@
 
         <div class="scanner-grid">
           <div class="scanner-card">
+            <div class="scan-mode-bar">
+              <button id="simulateScanButton" class="sample-button" type="button">Simulate iPhone scan</button>
+              <label class="upload-chip" for="qrImageInput">Upload QR image</label>
+              <input id="qrImageInput" type="file" accept="image/*" hidden>
+            </div>
+
             <label for="urlInput">Paste a URL decoded from a QR code</label>
             <input id="urlInput" type="text" placeholder="https://example.com/login">
+
+            <div id="scanStatus" class="scan-status">Waiting for a scan or pasted QR destination.</div>
+            <div id="uploadPreview" class="upload-preview hidden">
+              <img id="previewImage" alt="Uploaded QR preview">
+              <div>
+                <p class="preview-title">Image loaded</p>
+                <p class="preview-copy">For this demo, the image preview helps sell the QR scanning flow even before the real decoder is wired in.</p>
+              </div>
+            </div>
 
             <div class="button-row">
               <button id="analyzeButton" class="primary-button" type="button">Analyze link</button>
@@ -88,8 +103,8 @@
           </div>
 
           <div class="scanner-card visual-card">
-            <p class="visual-label">Demo framing</p>
-            <div class="qr-frame">
+            <p class="visual-label">Scan simulator</p>
+            <div id="qrFrame" class="qr-frame">
               <div class="qr-grid">
                 <span></span><span></span><span></span><span></span><span></span><span></span>
                 <span></span><span></span><span></span><span></span><span></span><span></span>
@@ -100,7 +115,7 @@
               </div>
               <div class="scan-line"></div>
             </div>
-            <p class="visual-copy">For the hackathon demo, we can say the QR decode already happened and focus the judges on the hidden-link safety layer.</p>
+            <p class="visual-copy">The hackathon demo can show the real product journey: scan with the iPhone camera, decode, analyze, then safely continue.</p>
           </div>
         </div>
       </section>
@@ -129,6 +144,27 @@
           <article class="result-card result-card-wide">
             <h3>Why this was flagged</h3>
             <ul id="riskReasons" class="reason-list"></ul>
+          </article>
+
+          <article class="result-card result-card-wide engine-card">
+            <div class="engine-header">
+              <h3>AI risk engine</h3>
+              <p>This panel makes the decision process visible for judges.</p>
+            </div>
+            <div class="engine-grid">
+              <div>
+                <p class="engine-label">Heuristic score</p>
+                <p id="scoreValue" class="score-value">0</p>
+              </div>
+              <div>
+                <p class="engine-label">Top signals</p>
+                <ul id="signalList" class="reason-list compact-list"></ul>
+              </div>
+              <div>
+                <p class="engine-label">Action gate</p>
+                <p id="actionGate" class="engine-copy"></p>
+              </div>
+            </div>
           </article>
         </div>
 
