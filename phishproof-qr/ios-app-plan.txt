@@ -39,7 +39,7 @@ The first version should be:
 An intelligent QR safety scanner with explainable risk analysis
 
 What the MVP should do
-1. Scan QR codes using the iPhone camera.
+1. Scan QR codes using the iPhone camera in real time.
 2. Decode QR payloads from QR codes.
 3. Classify payload types such as website, text, phone number, email, SMS, contact, or Wi-Fi.
 4. Expand redirects safely without automatically opening the final page in Safari.
@@ -73,6 +73,15 @@ Preview the contact data and allow add-to-contacts flow.
 
 7. Wi-Fi payload
 Show the network name and security type and expose the details in a reviewable way.
+
+iPhone camera scanning requirement
+The app should support a true camera-first flow, not just pasted URLs or imported screenshots. For the product to feel real on iPhone, the primary interaction should be:
+1. open app
+2. point camera at QR code
+3. detect and decode instantly
+4. pause before opening
+5. show risk analysis
+6. continue safely from the same screen
 
 Auto-execute policy
 Auto-execute should only be available when:
@@ -327,7 +336,7 @@ For a hackathon, the best pitch is:
 An iOS app that makes hidden QR threats visible before the user taps
 
 Hackathon MVP scope
-1. Scan QR
+1. Scan QR with live iPhone camera
 2. Decode payload
 3. Expand redirects for URLs
 4. Show verdict
