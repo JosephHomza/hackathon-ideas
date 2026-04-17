@@ -1,7 +1,7 @@
 PhishProof QR iOS App Plan
 
 Core idea
-PhishProof QR is an iPhone app that helps users inspect QR codes before trusting them. Instead of sending the user straight to a website, the app scans the QR code, extracts the URL, expands redirects, checks for suspicious signals, and shows a safety verdict with an explanation.
+PhishProof QR is an iPhone app that helps users inspect QR codes before trusting them. Instead of sending the user straight to a website, the app scans the QR code, extracts the URL or payload action, expands redirects when needed, checks for suspicious signals, and shows a safety verdict with an explanation. After review, the app should let the user continue with the QR code's intended action without scanning it again.
 
 Why this is a strong app idea
 1. It is easy to understand instantly.
@@ -13,18 +13,25 @@ Why this is a strong app idea
 Core user promise
 Scan first. Know where it really goes. Decide with confidence.
 
+Convenience mode
+The app can optionally auto-execute certain low-risk QR actions when no suspicious risk signals are found. This should be a user-controlled setting, not the default behavior for every action type.
+
 Main user flow
 1. User opens the app.
 2. User scans a QR code with the iPhone camera or uploads an image.
 3. App decodes the QR content.
-4. If the content is a URL, the app analyzes it.
+4. App classifies the payload type.
+5. If the content is a URL, the app analyzes it.
 5. App displays:
 - final destination
 - redirect chain
 - risk verdict
 - reasons for the verdict
 - recommended next action
-6. User chooses whether to open the link, copy it, or discard it.
+6. User chooses whether to continue with the decoded action, copy the content, or discard it.
+
+Optional fast path
+If the user has enabled auto-execute for low-risk results, and the QR payload is in an approved action category, the app can continue automatically after analysis when the verdict is Safe.
 
 Best MVP positioning
 This should not try to be a full antivirus app.
@@ -33,16 +40,59 @@ An intelligent QR safety scanner with explainable risk analysis
 
 What the MVP should do
 1. Scan QR codes using the iPhone camera.
-2. Decode URLs from QR codes.
-3. Expand redirects safely without automatically opening the final page in Safari.
-4. Run a rules-based risk check on the URL and redirect chain.
+2. Decode QR payloads from QR codes.
+3. Classify payload types such as website, text, phone number, email, SMS, contact, or Wi-Fi.
+4. Expand redirects safely without automatically opening the final page in Safari.
+5. Run a rules-based risk check on the URL and redirect chain.
 5. Show a result screen with:
 - safe
 - caution
 - suspicious
 - dangerous
 6. Explain why the rating was given.
-7. Let the user open the URL only after review.
+7. Let the user continue with the QR code's intended action only after review.
+
+Supported QR action types for the MVP
+1. Website URL
+Open in Safari or an in-app browser after approval.
+
+2. Plain text
+Copy or share from the result screen.
+
+3. Phone number
+Show the number and offer a call action after confirmation.
+
+4. Email address
+Open a compose sheet with the decoded address after confirmation.
+
+5. SMS
+Open the Messages compose flow with the decoded number and text after confirmation.
+
+6. Contact card
+Preview the contact data and allow add-to-contacts flow.
+
+7. Wi-Fi payload
+Show the network name and security type and expose the details in a reviewable way.
+
+Auto-execute policy
+Auto-execute should only be available when:
+1. the verdict is Safe,
+2. the user has enabled the feature in settings,
+3. the payload type is allowed for auto-execution,
+4. there are no unusual redirects or ambiguous signals.
+
+Good candidates for auto-execute
+1. Website URL with Safe verdict
+2. Plain text copy action
+3. Email compose
+4. SMS compose
+
+Actions that should still require confirmation
+1. Phone calls
+2. Contact import
+3. Wi-Fi payloads
+4. Unknown or unsupported payload types
+5. Any payload with Caution, Suspicious, or Dangerous verdict
 
 Risk signals the MVP can use
 1. Use of URL shorteners
@@ -69,6 +119,7 @@ Recommended stack:
 - AVFoundation for camera scanning
 - Vision framework if needed for image-based detection
 - URLSession for safe network checks
+- system URL/action handoff after approval
 - Local rules engine for first-pass analysis
 - Optional small backend for richer reputation checks
 
@@ -100,16 +151,19 @@ Navigation, theme, app state
 2. ScannerModule
 Camera view, scan frame, permissions, QR decoding
 
-3. ResultModule
+3. ActionModule
+Payload classification, action preview, and approved action handoff
+
+4. ResultModule
 Verdict screen, redirect trail, risk reasons, action buttons
 
-4. AnalysisEngine
+5. AnalysisEngine
 URL normalization, redirect resolution, domain heuristics, scoring
 
-5. HistoryModule
+6. HistoryModule
 Previous scans, saved suspicious links, local storage
 
-6. SettingsModule
+7. SettingsModule
 Permissions, privacy options, optional API configuration
 
 Best first release screens
@@ -129,7 +183,7 @@ Main verdict, final URL, redirect chain, risk reasons, open-link button
 List of prior scans and outcomes
 
 6. Settings screen
-Privacy options, help, and optional integrations
+Privacy options, help, optional integrations, and auto-execute settings
 
 Privacy and trust principles
 Since this is a security app, trust matters a lot.
@@ -140,6 +194,17 @@ The app should:
 3. Avoid storing unnecessary personal data
 4. Let users clear scan history
 5. Explain when a result is heuristic rather than confirmed
+
+Updated trust principle for convenience mode
+The app should never claim that a QR code is guaranteed malware-free. The wording should be:
+- Safe
+- Low risk
+- No suspicious signals found
+
+It should avoid language like:
+- guaranteed safe
+- malware-free
+- fully trusted
 
 Recommended scoring model
 Start with a weighted risk score.
@@ -159,6 +224,9 @@ Then map score to verdict:
 - 20 to 39 = Caution
 - 40 to 69 = Suspicious
 - 70+ = Dangerous
+
+Auto-execute rule
+Only the Safe range should be eligible for optional automatic continuation.
 
 How to organize the code
 Suggested folder structure:
@@ -189,6 +257,10 @@ PhishProofQR/
     - ScannerView.swift
     - ScannerViewModel.swift
     - CameraScannerService.swift
+  - Actions/
+    - ActionPreviewView.swift
+    - ActionExecutionService.swift
+    - PayloadRouter.swift
   - Results/
     - ResultView.swift
     - ResultViewModel.swift
@@ -197,6 +269,7 @@ PhishProofQR/
     - HistoryViewModel.swift
   - Settings/
     - SettingsView.swift
+    - AutoActionSettingsView.swift
 - Services/
   - QRDecoderService.swift
   - URLExpansionService.swift
@@ -204,6 +277,9 @@ PhishProofQR/
   - ReputationService.swift
 - Models/
   - ScanResult.swift
+  - QRPayload.swift
+  - QRPayloadType.swift
+  - AutoActionPolicy.swift
   - RiskFactor.swift
   - RedirectHop.swift
   - VerdictLevel.swift
@@ -217,10 +293,13 @@ PhishProofQR/
 
 How to split responsibility
 1. Scanner code should only scan and return raw content.
-2. Analysis code should classify and score URLs.
-3. Result code should only display structured findings.
-4. Network services should be isolated so they can be mocked in tests.
-5. Models should stay simple and portable.
+2. Payload classification code should identify whether the QR is a URL, SMS, email, contact, Wi-Fi, phone number, or plain text.
+3. Analysis code should classify and score URLs.
+4. Action execution code should only run after user approval.
+4A. If auto-execute is enabled, action execution code may run automatically only for Safe verdicts and approved payload types.
+5. Result code should only display structured findings.
+6. Network services should be isolated so they can be mocked in tests.
+7. Models should stay simple and portable.
 
 Backend recommendation
 The first version can be mostly on-device, but a lightweight backend can improve it later.
@@ -249,11 +328,14 @@ An iOS app that makes hidden QR threats visible before the user taps
 
 Hackathon MVP scope
 1. Scan QR
-2. Decode URL
-3. Expand redirects
+2. Decode payload
+3. Expand redirects for URLs
 4. Show verdict
 5. Explain risk reasons
-6. Let user decide whether to open
+6. Let user continue with the decoded action from the same screen
+
+Optional MVP-plus behavior
+7. If the verdict is Safe and the user has enabled it, auto-continue with approved low-risk actions
 
 Stretch features
 1. Scan from screenshots
