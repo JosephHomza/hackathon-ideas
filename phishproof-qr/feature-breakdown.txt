@@ -1,7 +1,7 @@
 Feature Breakdown
 
 Must-have MVP
-1. Camera-based QR scanning
+1. Live iPhone camera-based QR scanning
 2. Image upload QR scanning
 3. QR payload decoding
 4. QR payload classification
@@ -41,3 +41,4 @@ Nice-to-have later
 3. Browser extension companion
 4. Apple Watch alert handoff
 5. Branded QR verification system
+6. Learned risk model trained on malicious and benign QR destinations
