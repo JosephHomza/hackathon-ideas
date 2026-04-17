@@ -14,13 +14,13 @@ Strong social impact and easy for judges to understand quickly.
 Why it stands out
 Highly visual and memorable, especially if polished.
 
-4. PillPing
+4. PhishProof QR
+Why it stands out
+It has a clean cybersecurity story, a strong live demo, and an easy-to-understand "hidden risk revealed" moment.
+
+5. PillPing
 Why it stands out
 Simple hardware demo with clear human value.
-
-5. VisitPrep
-Why it stands out
-Easy to build, useful, and emotionally relatable.
 
 If you want the best chance to impress judges fast
 - choose ClaimBridge for healthcare
@@ -28,3 +28,4 @@ If you want the best chance to impress judges fast
 - choose MoodCanvas for art design
 - choose PillPing for hardware
 - choose Denial Decoder for hello world
+- choose PhishProof QR for cybersecurity
