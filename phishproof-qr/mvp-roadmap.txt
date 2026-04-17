@@ -1,0 +1,37 @@
+MVP Roadmap
+
+Phase 1: Core scan flow
+1. Set up SwiftUI app shell
+2. Add camera permission flow
+3. Build QR scanner screen
+4. Decode QR result
+5. Detect whether content is a URL
+
+Phase 2: URL analysis
+1. Normalize URL
+2. Expand redirects safely
+3. Parse domain and path
+4. Add heuristic risk scoring
+5. Create verdict mapping
+
+Phase 3: Results UX
+1. Build analysis loading screen
+2. Build verdict screen
+3. Show redirect chain
+4. Show risk reasons
+5. Add open/copy/save actions
+
+Phase 4: Polish
+1. Add scan from photo library
+2. Add scan history
+3. Improve visual design
+4. Add empty states and errors
+5. Add test coverage for scoring logic
+
+Best first demo
+1. Scan a safe QR code
+2. Show safe verdict
+3. Scan a suspicious shortener-based QR
+4. Show redirect chain and warning
+5. Scan a lookalike-domain sample
+6. Show why it is risky
