@@ -1,0 +1,58 @@
+Tech For Good Ideas
+
+1. BenefitBridge
+Concept
+A simple assistant that helps users understand which public benefits or aid programs they may qualify for based on a short questionnaire.
+
+Why judges may love it
+Clear social impact, easy story, and useful for real communities.
+
+Why it is easy enough
+The MVP can be a guided form and recommendation engine without trying to automate applications.
+
+MVP
+- short eligibility questionnaire
+- likely matching programs
+- checklist of needed documents
+- save/share results
+
+Wow factor
+Confusing support systems become understandable in a few steps.
+
+2. ShelterSync
+Concept
+A lightweight dashboard showing nearby shelters, food pantries, and support locations with real-time notes or capacity updates.
+
+Why judges may love it
+Immediate community impact and easy to visualize.
+
+Why it is easy enough
+Map plus resource cards plus simple admin update mode.
+
+MVP
+- searchable map
+- resource list
+- open/closed or full/available status
+- mobile-friendly layout
+
+Wow factor
+Critical resources become visible and usable in one place.
+
+3. CoverageLift
+Concept
+An app that helps small healthcare teams organize denied claims and prepare better appeal workflows.
+
+Why judges may love it
+Strong mission, clear real-world value, and healthcare equity angle.
+
+Why it is easy enough
+The MVP can focus only on summary, checklist, and workflow support.
+
+MVP
+- upload denial letter
+- extract key info
+- show missing docs
+- generate appeal checklist
+
+Wow factor
+Administrative complexity gets turned into clear action for understaffed teams.
