@@ -1,0 +1,30 @@
+Top Picks
+
+Best balance of easy, impactful, and judge-friendly
+
+1. ClaimBridge
+Why it stands out
+Real healthcare problem, strong demo, and more serious than a generic chatbot.
+
+2. BenefitBridge
+Why it stands out
+Strong social impact and easy for judges to understand quickly.
+
+3. MoodCanvas
+Why it stands out
+Highly visual and memorable, especially if polished.
+
+4. PillPing
+Why it stands out
+Simple hardware demo with clear human value.
+
+5. VisitPrep
+Why it stands out
+Easy to build, useful, and emotionally relatable.
+
+If you want the best chance to impress judges fast
+- choose ClaimBridge for healthcare
+- choose BenefitBridge for tech for good
+- choose MoodCanvas for art design
+- choose PillPing for hardware
+- choose Denial Decoder for hello world
