@@ -1,0 +1,25 @@
+Feature Breakdown
+
+Must-have MVP
+1. Camera-based QR scanning
+2. Image upload QR scanning
+3. URL decoding
+4. Redirect expansion
+5. Domain risk analysis
+6. Verdict screen
+7. Risk explanation bullets
+8. Manual open-link button
+
+Should-have after MVP
+1. Scan history
+2. Copy URL
+3. Share result
+4. Suspicious-domain education tips
+5. Trusted allowlist
+
+Nice-to-have later
+1. Threat-intel backend
+2. Family or enterprise mode
+3. Browser extension companion
+4. Apple Watch alert handoff
+5. Branded QR verification system
