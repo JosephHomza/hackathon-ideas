@@ -3,12 +3,28 @@ Feature Breakdown
 Must-have MVP
 1. Camera-based QR scanning
 2. Image upload QR scanning
-3. URL decoding
-4. Redirect expansion
-5. Domain risk analysis
-6. Verdict screen
-7. Risk explanation bullets
-8. Manual open-link button
+3. QR payload decoding
+4. QR payload classification
+5. Redirect expansion
+6. Domain risk analysis
+7. Verdict screen
+8. Risk explanation bullets
+9. Manual approved action button
+
+Supported approved actions
+1. Open website
+2. Copy text
+3. Start phone call
+4. Open email compose
+5. Open SMS compose
+6. Preview Wi-Fi details
+7. Preview contact card
+
+Auto-execute rules
+1. Only for Safe verdicts
+2. Only when enabled by the user
+3. Only for approved action types
+4. Disabled for risky or ambiguous payloads
 
 Should-have after MVP
 1. Scan history
@@ -16,6 +32,8 @@ Should-have after MVP
 3. Share result
 4. Suspicious-domain education tips
 5. Trusted allowlist
+6. Secure in-app browser preview
+7. Auto-open low-risk website actions
 
 Nice-to-have later
 1. Threat-intel backend
