@@ -1,0 +1,58 @@
+Hello World Ideas
+
+1. Denial Decoder
+Concept
+Upload a healthcare denial letter and get a simple summary, due date, and next-step checklist.
+
+Why judges may love it
+It solves a real problem but is still understandable and beginner-friendly.
+
+Why it is easy enough
+One upload flow, simple extraction, and a clean results screen.
+
+MVP
+- upload one PDF
+- extract denial reason
+- show due date
+- generate next-step list
+
+Wow factor
+Messy paperwork becomes a clear action plan in seconds.
+
+2. Resume Rewriter for First Jobs
+Concept
+A beginner-friendly app that turns a rough resume into cleaner bullet points for internships and entry-level jobs.
+
+Why judges may love it
+Relatable, useful, and easy to test live.
+
+Why it is easy enough
+Text input and text transformation is manageable in a hackathon.
+
+MVP
+- paste resume text
+- choose target role
+- get improved bullet points
+- copy/export results
+
+Wow factor
+Before and after resume transformation is instant and obvious.
+
+3. Study Sprint Buddy
+Concept
+A simple web app that creates a mini study plan from a topic and available time.
+
+Why judges may love it
+It is easy to understand and useful for students.
+
+Why it is easy enough
+It is mostly form input, planning logic, and polished presentation.
+
+MVP
+- input topic
+- input time available
+- generate study plan
+- progress checklist
+
+Wow factor
+A vague goal becomes a clear plan in one click.
