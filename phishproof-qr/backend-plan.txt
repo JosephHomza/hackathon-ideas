@@ -1,0 +1,41 @@
+Backend Plan
+
+Do we need a backend?
+Not for the very first version.
+
+Best first approach
+Use a thin-client approach:
+1. App scans QR locally
+2. App decodes URL locally
+3. App follows redirects safely with limited HEAD or GET requests
+4. App runs heuristic scoring on-device
+
+Why this is better first
+1. Faster to build
+2. Lower hosting complexity
+3. Better privacy story
+4. Easier hackathon demo
+
+When a backend becomes useful
+1. When you want malware or phishing lookups from external datasets
+2. When you want to cache verdicts
+3. When you want admin analytics
+4. When you want shared blocklists or allowlists
+
+Recommended future backend
+- small API service
+- REST endpoint for URL reputation checks
+- caching layer
+- optional queue for external threat lookups
+
+Possible future backend endpoints
+- POST /scan/check
+- GET /domain/reputation
+- GET /domain/history
+- POST /feedback/report
+
+Recommended backend stack later
+- Node.js or Python
+- lightweight database
+- Redis cache if needed
+- third-party reputation API integrations
