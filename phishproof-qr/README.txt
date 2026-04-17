@@ -9,3 +9,4 @@ Files
 - screens-and-flow.txt
 - backend-plan.txt
 - mvp-roadmap.txt
+- ai-training-plan.txt
