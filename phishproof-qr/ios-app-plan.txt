@@ -1,0 +1,273 @@
+PhishProof QR iOS App Plan
+
+Core idea
+PhishProof QR is an iPhone app that helps users inspect QR codes before trusting them. Instead of sending the user straight to a website, the app scans the QR code, extracts the URL, expands redirects, checks for suspicious signals, and shows a safety verdict with an explanation.
+
+Why this is a strong app idea
+1. It is easy to understand instantly.
+2. It solves a modern phishing problem people actually face.
+3. It has a strong live demo.
+4. It can start simple and still feel polished.
+5. It has room to expand into a bigger security product later.
+
+Core user promise
+Scan first. Know where it really goes. Decide with confidence.
+
+Main user flow
+1. User opens the app.
+2. User scans a QR code with the iPhone camera or uploads an image.
+3. App decodes the QR content.
+4. If the content is a URL, the app analyzes it.
+5. App displays:
+- final destination
+- redirect chain
+- risk verdict
+- reasons for the verdict
+- recommended next action
+6. User chooses whether to open the link, copy it, or discard it.
+
+Best MVP positioning
+This should not try to be a full antivirus app.
+The first version should be:
+An intelligent QR safety scanner with explainable risk analysis
+
+What the MVP should do
+1. Scan QR codes using the iPhone camera.
+2. Decode URLs from QR codes.
+3. Expand redirects safely without automatically opening the final page in Safari.
+4. Run a rules-based risk check on the URL and redirect chain.
+5. Show a result screen with:
+- safe
+- caution
+- suspicious
+- dangerous
+6. Explain why the rating was given.
+7. Let the user open the URL only after review.
+
+Risk signals the MVP can use
+1. Use of URL shorteners
+2. Too many redirects
+3. IP-address-based URLs
+4. Suspicious or uncommon TLDs
+5. Lookalike domains
+6. Mismatch between displayed brand words and real domain
+7. Overly long or encoded URLs
+8. Known phishing or malware lookup if an external API is added
+
+What makes the app feel smart
+The real value is not only the verdict. The real value is the explanation.
+
+Example:
+- "This QR code redirects twice before landing on a different domain."
+- "The domain looks similar to a known brand but is spelled differently."
+- "This link uses a shortener, which hides the real destination."
+
+App structure recommendation
+Recommended stack:
+- Swift
+- SwiftUI
+- AVFoundation for camera scanning
+- Vision framework if needed for image-based detection
+- URLSession for safe network checks
+- Local rules engine for first-pass analysis
+- Optional small backend for richer reputation checks
+
+Recommended architecture
+Use a simple layered architecture:
+
+1. Presentation layer
+SwiftUI screens and reusable components
+
+2. Scan layer
+Camera and image import handling
+
+3. Decode layer
+QR parsing and content classification
+
+4. Analysis layer
+Redirect expansion, URL parsing, and risk scoring
+
+5. Data layer
+History, saved scans, settings, and optional local storage
+
+6. Network layer
+Optional API calls for reputation or threat intelligence
+
+Suggested module split
+1. AppShell
+Navigation, theme, app state
+
+2. ScannerModule
+Camera view, scan frame, permissions, QR decoding
+
+3. ResultModule
+Verdict screen, redirect trail, risk reasons, action buttons
+
+4. AnalysisEngine
+URL normalization, redirect resolution, domain heuristics, scoring
+
+5. HistoryModule
+Previous scans, saved suspicious links, local storage
+
+6. SettingsModule
+Permissions, privacy options, optional API configuration
+
+Best first release screens
+1. Welcome screen
+Short explanation and scan button
+
+2. Scanner screen
+Live camera view with framing box and gallery import option
+
+3. Analysis loading screen
+Small animation while URL is being decoded and checked
+
+4. Results screen
+Main verdict, final URL, redirect chain, risk reasons, open-link button
+
+5. Scan history screen
+List of prior scans and outcomes
+
+6. Settings screen
+Privacy options, help, and optional integrations
+
+Privacy and trust principles
+Since this is a security app, trust matters a lot.
+
+The app should:
+1. Never automatically open scanned links
+2. Tell users what is being checked
+3. Avoid storing unnecessary personal data
+4. Let users clear scan history
+5. Explain when a result is heuristic rather than confirmed
+
+Recommended scoring model
+Start with a weighted risk score.
+
+Example:
+- URL shortener: +20
+- IP address host: +25
+- suspicious TLD: +15
+- redirect count above 2: +10
+- lookalike domain match: +30
+- encoded or obfuscated path: +10
+- known safe domain: -20
+- trusted allowlist match: -30
+
+Then map score to verdict:
+- 0 to 19 = Safe
+- 20 to 39 = Caution
+- 40 to 69 = Suspicious
+- 70+ = Dangerous
+
+How to organize the code
+Suggested folder structure:
+
+PhishProofQR/
+- App/
+- Core/
+- Features/
+- Services/
+- Models/
+- Resources/
+- Tests/
+
+More detailed structure:
+
+PhishProofQR/
+- App/
+  - PhishProofQRApp.swift
+  - AppRouter.swift
+  - AppTheme.swift
+- Core/
+  - Networking/
+  - Utilities/
+  - Extensions/
+  - Security/
+- Features/
+  - Scanner/
+    - ScannerView.swift
+    - ScannerViewModel.swift
+    - CameraScannerService.swift
+  - Results/
+    - ResultView.swift
+    - ResultViewModel.swift
+  - History/
+    - HistoryView.swift
+    - HistoryViewModel.swift
+  - Settings/
+    - SettingsView.swift
+- Services/
+  - QRDecoderService.swift
+  - URLExpansionService.swift
+  - RiskAnalysisService.swift
+  - ReputationService.swift
+- Models/
+  - ScanResult.swift
+  - RiskFactor.swift
+  - RedirectHop.swift
+  - VerdictLevel.swift
+- Resources/
+  - Assets.xcassets
+  - Localizable.strings
+- Tests/
+  - AnalysisEngineTests.swift
+  - URLParsingTests.swift
+  - VerdictMappingTests.swift
+
+How to split responsibility
+1. Scanner code should only scan and return raw content.
+2. Analysis code should classify and score URLs.
+3. Result code should only display structured findings.
+4. Network services should be isolated so they can be mocked in tests.
+5. Models should stay simple and portable.
+
+Backend recommendation
+The first version can be mostly on-device, but a lightweight backend can improve it later.
+
+Version 1:
+- local QR scanning
+- local heuristic analysis
+- direct URL expansion
+
+Version 2:
+- backend threat lookup
+- cached reputation results
+- malicious domain allowlist/blocklist feeds
+- admin dashboard for analytics
+
+What the backend would do later
+1. Accept a URL hash or URL for checking
+2. Query safe browsing or threat intel sources
+3. Return structured risk signals
+4. Cache common results
+5. Support future analytics without bloating the app
+
+Best hackathon version
+For a hackathon, the best pitch is:
+An iOS app that makes hidden QR threats visible before the user taps
+
+Hackathon MVP scope
+1. Scan QR
+2. Decode URL
+3. Expand redirects
+4. Show verdict
+5. Explain risk reasons
+6. Let user decide whether to open
+
+Stretch features
+1. Scan from screenshots
+2. Trusted business QR verification mode
+3. Branded safe QR generation
+4. Scan history with flags
+5. Visual attack explanation mode
+
+Biggest risks
+1. Overbuilding too early
+2. Relying too heavily on external APIs
+3. Making the result screen too technical
+4. Giving false confidence
+5. Letting the scope drift into general web security
+
+Best way to win
+Keep the experience simple, fast, and explainable. The app should feel like a clear safety checkpoint between a QR scan and a risky click.
