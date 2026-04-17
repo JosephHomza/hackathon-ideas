@@ -5,7 +5,7 @@ Phase 1: Core scan flow
 2. Add camera permission flow
 3. Build QR scanner screen
 4. Decode QR result
-5. Detect whether content is a URL
+5. Detect payload type
 
 Phase 2: URL analysis
 1. Normalize URL
@@ -14,12 +14,25 @@ Phase 2: URL analysis
 4. Add heuristic risk scoring
 5. Create verdict mapping
 
+Phase 2B: Action routing
+1. Map QR payload types to supported app actions
+2. Build action preview model
+3. Add safe handoff for web, phone, email, SMS, and text
+4. Keep approval step before executing anything
+
+Phase 2C: Safe auto-execute
+1. Add user setting for auto-open low-risk actions
+2. Create allowlist of payload types eligible for auto-execute
+3. Auto-continue only for Safe verdicts
+4. Keep manual review for all higher-risk verdicts
+
 Phase 3: Results UX
 1. Build analysis loading screen
 2. Build verdict screen
 3. Show redirect chain
 4. Show risk reasons
-5. Add open/copy/save actions
+5. Add continue/copy/save actions
+6. Add action preview confirmation
 
 Phase 4: Polish
 1. Add scan from photo library
@@ -31,7 +44,8 @@ Phase 4: Polish
 Best first demo
 1. Scan a safe QR code
 2. Show safe verdict
-3. Scan a suspicious shortener-based QR
-4. Show redirect chain and warning
-5. Scan a lookalike-domain sample
-6. Show why it is risky
+3. Auto-continue with the decoded action if safe mode is enabled
+4. Scan a suspicious shortener-based QR
+5. Show redirect chain and warning
+6. Scan a lookalike-domain sample
+7. Show why it is risky
