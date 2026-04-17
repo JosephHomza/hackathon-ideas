@@ -22,10 +22,10 @@
           <a class="secondary-button" href="#story">Why it matters</a>
         </div>
       </div>
-      <div class="hero-card">
+        <div class="hero-card">
         <div class="hero-card-label">Demo focus</div>
         <ul>
-          <li>Scan QR codes with the iPhone camera</li>
+          <li>Built around iPhone scanning behavior</li>
           <li>Reveal the true destination</li>
           <li>Score phishing and malware risk signals</li>
           <li>Auto-continue safe actions when enabled</li>
@@ -45,7 +45,7 @@
         </article>
         <article class="story-card">
           <h2>How does scanning work?</h2>
-          <p>The real product uses the iPhone camera as the main entry point. This front-end demo focuses on the analysis layer after the QR has been decoded.</p>
+          <p>The product is designed around iPhone usage first. In the browser demo, we simulate the scan flow and support camera-based photo capture so the experience feels closer to mobile Safari.</p>
         </article>
         <article class="story-card">
           <h2>What is the hackathon hook?</h2>
@@ -70,8 +70,8 @@
           <div class="scanner-card">
             <div class="scan-mode-bar">
               <button id="simulateScanButton" class="sample-button" type="button">Simulate iPhone scan</button>
-              <label class="upload-chip" for="qrImageInput">Upload QR image</label>
-              <input id="qrImageInput" type="file" accept="image/*" hidden>
+              <label class="upload-chip" for="qrImageInput">Use iPhone camera/photo</label>
+              <input id="qrImageInput" type="file" accept="image/*" capture="environment" hidden>
             </div>
 
             <label for="urlInput">Paste a URL decoded from a QR code</label>
@@ -81,8 +81,8 @@
             <div id="uploadPreview" class="upload-preview hidden">
               <img id="previewImage" alt="Uploaded QR preview">
               <div>
-                <p class="preview-title">Image loaded</p>
-                <p class="preview-copy">For this demo, the image preview helps sell the QR scanning flow even before the real decoder is wired in.</p>
+                <p class="preview-title">Camera/photo loaded</p>
+                <p class="preview-copy">On iPhone, this button should offer taking a photo or choosing a recent image. The full product would decode the QR directly from this capture flow.</p>
               </div>
             </div>
 
@@ -115,7 +115,7 @@
               </div>
               <div class="scan-line"></div>
             </div>
-            <p class="visual-copy">The hackathon demo can show the real product journey: scan with the iPhone camera, decode, analyze, then safely continue.</p>
+            <p class="visual-copy">The hackathon demo should show the real iPhone journey: camera scan, decode, analyze, then safely continue from the same screen.</p>
           </div>
         </div>
       </section>
