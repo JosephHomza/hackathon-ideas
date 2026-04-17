@@ -1,0 +1,58 @@
+Art Design Ideas
+
+1. MoodCanvas
+Concept
+An interactive website that turns a user's mood, music choice, or short journal entry into a living animated artwork.
+
+Why judges may love it
+It is visually impressive, easy to demo, and clearly combines creativity with code.
+
+Why it is easy enough
+The build can stay focused on one polished flow: text input, mood detection, and dynamic visuals with animation.
+
+MVP
+- text or mood input
+- animated visual output
+- color palette changes based on emotion
+- optional downloadable poster or image
+
+Wow factor
+The user types a few words and instantly gets a custom generative visual experience.
+
+2. Memory Museum
+Concept
+A web app where users upload a photo and write a memory, and the app turns it into a mini digital exhibit with ambient music, captions, and motion.
+
+Why judges may love it
+It feels emotional, polished, and memorable.
+
+Why it is easy enough
+It is mostly interface, media layout, and a small amount of AI-generated text or styling.
+
+MVP
+- upload image
+- add short memory
+- generate exhibit card
+- animated gallery mode
+
+Wow factor
+A personal memory becomes a tiny immersive museum piece.
+
+3. Typography DJ
+Concept
+A site that listens to voice or music and transforms words on screen into animated typography synced to the sound.
+
+Why judges may love it
+This feels playful, artsy, and performance-based.
+
+Why it is easy enough
+It can be done with browser audio input, waveform analysis, and text animation.
+
+MVP
+- microphone or music input
+- live animated text
+- theme presets
+- recording mode
+
+Wow factor
+The screen performs with the speaker or song in real time.
