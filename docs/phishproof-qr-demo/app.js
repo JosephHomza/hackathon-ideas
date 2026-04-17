@@ -10,6 +10,12 @@ const dom = {
   analyzeButton: document.getElementById("analyzeButton"),
   clearButton: document.getElementById("clearButton"),
   sampleButtons: Array.from(document.querySelectorAll(".sample-button")),
+  simulateScanButton: document.getElementById("simulateScanButton"),
+  qrImageInput: document.getElementById("qrImageInput"),
+  uploadPreview: document.getElementById("uploadPreview"),
+  previewImage: document.getElementById("previewImage"),
+  scanStatus: document.getElementById("scanStatus"),
+  qrFrame: document.getElementById("qrFrame"),
   resultsSection: document.getElementById("resultsSection"),
   resultTitle: document.getElementById("resultTitle"),
   verdictBadge: document.getElementById("verdictBadge"),
@@ -17,6 +23,9 @@ const dom = {
   actionText: document.getElementById("actionText"),
   redirectChain: document.getElementById("redirectChain"),
   riskReasons: document.getElementById("riskReasons"),
+  scoreValue: document.getElementById("scoreValue"),
+  signalList: document.getElementById("signalList"),
+  actionGate: document.getElementById("actionGate"),
   recommendedAction: document.getElementById("recommendedAction"),
   continueButton: document.getElementById("continueButton"),
   copyButton: document.getElementById("copyButton"),
@@ -102,12 +111,26 @@ function analyzeUrl(rawValue) {
   if (score >= 65) verdict = "Dangerous";
   else if (score >= 35) verdict = "Caution";
 
-  const canAutoContinue = verdict === "Safe";
-  const recommendedAction = canAutoContinue
-    ? "No suspicious signals were found in the demo analysis. You can continue to the destination."
-    : "Do not auto-open this QR destination. Review the reasons carefully and only continue if you trust the source.";
+  return {
+    verdict,
+    score,
+    urlString,
+    redirects,
+    reasons,
+    canAutoContinue: verdict === "Safe",
+    recommendedAction: verdict === "Safe"
+      ? "No suspicious signals were found in the demo analysis. You can continue to the destination."
+      : "Do not auto-open this QR destination. Review the reasons carefully and only continue if you trust the source."
+  };
+}
 
-  return { verdict, score, urlString, redirects, reasons, recommendedAction, canAutoContinue };
+function renderList(listElement, values) {
+  listElement.innerHTML = "";
+  values.forEach((value) => {
+    const item = document.createElement("li");
+    item.textContent = value;
+    listElement.appendChild(item);
+  });
 }
 
 function renderAnalysis(result) {
@@ -123,26 +146,17 @@ function renderAnalysis(result) {
   dom.actionText.textContent = result.canAutoContinue
     ? "Decoded action: open website. This can be continued from the same screen."
     : "Decoded action: website link. Manual review is recommended before continuing.";
-
-  dom.redirectChain.innerHTML = "";
-  result.redirects.forEach((hop) => {
-    const item = document.createElement("li");
-    item.textContent = hop;
-    dom.redirectChain.appendChild(item);
-  });
-
-  dom.riskReasons.innerHTML = "";
-  result.reasons.forEach((reason) => {
-    const item = document.createElement("li");
-    item.textContent = reason;
-    dom.riskReasons.appendChild(item);
-  });
-
+  renderList(dom.redirectChain, result.redirects);
+  renderList(dom.riskReasons, result.reasons);
+  renderList(dom.signalList, result.reasons.slice(0, 3));
+  dom.scoreValue.textContent = String(Math.max(result.score, 0));
+  dom.actionGate.textContent = result.canAutoContinue
+    ? "Eligible for low-risk continuation. If safe mode is enabled, the app can move forward without rescanning."
+    : "Manual approval required. The app should pause and explain the risk before any action executes.";
   dom.recommendedAction.textContent = result.recommendedAction;
   dom.continueButton.textContent = result.canAutoContinue && dom.autoContinueToggle.checked
     ? "Auto-continue triggered"
     : "Continue safely";
-
   if (result.canAutoContinue && dom.autoContinueToggle.checked) {
     dom.recommendedAction.textContent = "Safe mode is enabled, so the app would continue automatically without a second scan.";
   }
@@ -150,6 +164,7 @@ function renderAnalysis(result) {
 
 function runAnalysis() {
   try {
+    dom.scanStatus.textContent = "QR decoded. Running destination analysis and risk checks.";
     const result = analyzeUrl(dom.urlInput.value);
     renderAnalysis(result);
     dom.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -159,17 +174,46 @@ function runAnalysis() {
 }
 
 dom.analyzeButton.addEventListener("click", runAnalysis);
+
 dom.clearButton.addEventListener("click", () => {
   dom.urlInput.value = "";
   dom.resultsSection.classList.add("hidden");
+  dom.uploadPreview.classList.add("hidden");
+  dom.previewImage.removeAttribute("src");
+  dom.scanStatus.textContent = "Waiting for a scan or pasted QR destination.";
   lastAnalysis = null;
 });
+
 dom.sampleButtons.forEach((button) => {
   button.addEventListener("click", () => {
     dom.urlInput.value = sampleUrls[button.dataset.sample];
     runAnalysis();
   });
 });
+
+dom.simulateScanButton.addEventListener("click", () => {
+  dom.scanStatus.textContent = "iPhone camera locked onto QR code. Decoding payload...";
+  dom.qrFrame.classList.add("scanning");
+  dom.urlInput.value = sampleUrls.safe;
+  window.setTimeout(() => {
+    dom.scanStatus.textContent = "QR payload found. Preparing safety analysis.";
+    dom.qrFrame.classList.remove("scanning");
+    runAnalysis();
+  }, 1400);
+});
+
+dom.qrImageInput.addEventListener("change", (event) => {
+  const [file] = event.target.files || [];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    dom.previewImage.src = reader.result;
+    dom.uploadPreview.classList.remove("hidden");
+    dom.scanStatus.textContent = "QR image loaded. In the full product, the app would decode directly from the uploaded image.";
+  };
+  reader.readAsDataURL(file);
+});
+
 dom.copyButton.addEventListener("click", async () => {
   if (!lastAnalysis) return;
   try {
@@ -180,9 +224,10 @@ dom.copyButton.addEventListener("click", async () => {
     window.alert("Clipboard copy failed in this browser.");
   }
 });
+
 dom.continueButton.addEventListener("click", () => {
   if (!lastAnalysis) return;
-  if (lastAnalysis.verdict !== "Safe") {
+  if (!lastAnalysis.canAutoContinue) {
     window.alert("In the real app, higher-risk results would require explicit confirmation before opening.");
     return;
   }
