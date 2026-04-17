@@ -1,0 +1,48 @@
+Screens And Flow
+
+Screen 1: Home
+- App title
+- short explanation
+- scan now button
+- import image button
+
+Screen 2: Scanner
+- live camera preview
+- corner guide overlay
+- flashlight toggle
+- cancel button
+
+Screen 3: Analysis
+- loading animation
+- messages like:
+  - decoding QR
+  - checking redirects
+  - analyzing domain
+
+Screen 4: Results
+- verdict badge
+- final URL
+- redirect chain
+- risk reasons
+- recommendation text
+- open link button
+- copy link button
+- save result button
+
+Screen 5: History
+- scan list
+- verdict color
+- timestamp
+- tap to reopen result
+
+Screen 6: Settings
+- privacy notice
+- clear history
+- about
+- optional API settings
+
+Core flow
+Home -> Scanner -> Analysis -> Results -> Open or Save
+
+Secondary flow
+Home -> Import Image -> Analysis -> Results
