@@ -3,7 +3,7 @@ MVP Roadmap
 Phase 1: Core scan flow
 1. Set up SwiftUI app shell
 2. Add camera permission flow
-3. Build QR scanner screen
+3. Build live iPhone QR scanner screen
 4. Decode QR result
 5. Detect payload type
 
@@ -40,6 +40,13 @@ Phase 4: Polish
 3. Improve visual design
 4. Add empty states and errors
 5. Add test coverage for scoring logic
+
+Phase 5: Smarter detection
+1. Add reputation API integration
+2. Collect labeled suspicious and benign URL examples
+3. Build a small learned risk scorer on top of rules
+4. Compare model output with heuristic output
+5. Keep explainability in the final verdict
 
 Best first demo
 1. Scan a safe QR code
