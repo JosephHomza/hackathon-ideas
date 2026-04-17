@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishProof QR Demo</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Cybersecurity Hackathon Demo</p>
+        <h1>PhishProof QR</h1>
+        <p class="hero-text">
+          Scan once, inspect the hidden destination, and safely continue without rescanning.
+          This demo simulates the experience of a QR safety app that exposes phishing signals
+          before a user opens the link.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#scanner">Try the demo</a>
+          <a class="secondary-button" href="#story">Why it matters</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Demo focus</div>
+        <ul>
+          <li>Reveal the true destination</li>
+          <li>Score phishing and malware risk signals</li>
+          <li>Auto-continue safe actions when enabled</li>
+        </ul>
+      </div>
+    </header>
+
+    <main>
+      <section class="story-grid" id="story">
+        <article class="story-card">
+          <h2>What problem are we solving?</h2>
+          <p>QR codes hide the destination until after a scan. That makes phishing attacks easy to disguise as menus, parking meters, tickets, and event links.</p>
+        </article>
+        <article class="story-card">
+          <h2>What makes this different?</h2>
+          <p>Instead of immediately opening the QR destination, PhishProof QR explains why a link looks safe or suspicious and lets the user continue from the same screen.</p>
+        </article>
+        <article class="story-card">
+          <h2>What is the hackathon hook?</h2>
+          <p>It combines a strong cybersecurity story, a visual reveal, and a simple demo flow judges can understand in seconds.</p>
+        </article>
+      </section>
+
+      <section class="scanner-panel" id="scanner">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Interactive demo</p>
+            <h2>Analyze a QR destination</h2>
+          </div>
+          <label class="toggle-card">
+            <span>Auto-continue safe actions</span>
+            <input id="autoContinueToggle" type="checkbox">
+            <span class="toggle-slider" aria-hidden="true"></span>
+          </label>
+        </div>
+
+        <div class="scanner-grid">
+          <div class="scanner-card">
+            <label for="urlInput">Paste a URL decoded from a QR code</label>
+            <input id="urlInput" type="text" placeholder="https://example.com/login">
+
+            <div class="button-row">
+              <button id="analyzeButton" class="primary-button" type="button">Analyze link</button>
+              <button id="clearButton" class="secondary-button" type="button">Clear</button>
+            </div>
+
+            <div class="sample-block">
+              <p class="sample-title">Try sample QR destinations</p>
+              <div class="sample-buttons">
+                <button class="sample-button" type="button" data-sample="safe">Safe brand link</button>
+                <button class="sample-button" type="button" data-sample="shortener">Shortened redirect chain</button>
+                <button class="sample-button" type="button" data-sample="lookalike">Lookalike phishing link</button>
+                <button class="sample-button" type="button" data-sample="encoded">Encoded suspicious URL</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="scanner-card visual-card">
+            <p class="visual-label">Demo framing</p>
+            <div class="qr-frame">
+              <div class="qr-grid">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="scan-line"></div>
+            </div>
+            <p class="visual-copy">For the hackathon demo, we can say the QR decode already happened and focus the judges on the hidden-link safety layer.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultsSection" class="results-panel hidden">
+        <div class="results-header">
+          <div>
+            <p class="eyebrow">Analysis result</p>
+            <h2 id="resultTitle">Verdict</h2>
+          </div>
+          <div id="verdictBadge" class="verdict-badge">Safe</div>
+        </div>
+
+        <div class="results-grid">
+          <article class="result-card">
+            <h3>Destination</h3>
+            <p id="finalUrl" class="mono"></p>
+            <p id="actionText" class="result-support"></p>
+          </article>
+
+          <article class="result-card">
+            <h3>Redirect chain</h3>
+            <ol id="redirectChain" class="chain-list"></ol>
+          </article>
+
+          <article class="result-card result-card-wide">
+            <h3>Why this was flagged</h3>
+            <ul id="riskReasons" class="reason-list"></ul>
+          </article>
+        </div>
+
+        <div class="decision-bar">
+          <div>
+            <p class="decision-label">Recommended action</p>
+            <p id="recommendedAction" class="decision-text"></p>
+          </div>
+          <div class="button-row">
+            <button id="continueButton" class="primary-button" type="button">Continue safely</button>
+            <button id="copyButton" class="secondary-button" type="button">Copy URL</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
