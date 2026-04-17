@@ -21,13 +21,21 @@ Screen 3: Analysis
 
 Screen 4: Results
 - verdict badge
+- payload type
 - final URL
 - redirect chain
 - risk reasons
 - recommendation text
-- open link button
+- continue safely button
 - copy link button
 - save result button
+
+Screen 4A: Action Preview
+- decoded action summary
+- final URL or payload details
+- warning if risky
+- confirm action button
+- cancel button
 
 Screen 5: History
 - scan list
@@ -40,9 +48,14 @@ Screen 6: Settings
 - clear history
 - about
 - optional API settings
+- auto-execute safe actions toggle
+- allowed auto-action types
 
 Core flow
-Home -> Scanner -> Analysis -> Results -> Open or Save
+Home -> Scanner -> Analysis -> Results -> Action Preview -> Continue or Save
 
 Secondary flow
 Home -> Import Image -> Analysis -> Results
+
+Optional fast flow
+Home -> Scanner -> Analysis -> Auto-continue if Safe and enabled
