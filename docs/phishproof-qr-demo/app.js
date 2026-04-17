@@ -209,7 +209,7 @@ dom.qrImageInput.addEventListener("change", (event) => {
   reader.onload = () => {
     dom.previewImage.src = reader.result;
     dom.uploadPreview.classList.remove("hidden");
-    dom.scanStatus.textContent = "QR image loaded. In the full product, the app would decode directly from the uploaded image.";
+    dom.scanStatus.textContent = "Camera or photo input received. On iPhone, the full product would decode the QR directly from this capture flow.";
   };
   reader.readAsDataURL(file);
 });
