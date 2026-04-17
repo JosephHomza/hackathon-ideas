@@ -9,6 +9,7 @@ Tracks covered
 - Tech for good
 - Hardware
 - Healthcare
+- Cybersecurity
 
 Files
 - art-design.txt
@@ -16,4 +17,5 @@ Files
 - tech-for-good.txt
 - hardware.txt
 - healthcare.txt
+- cybersecurity.txt
 - top-picks.txt
