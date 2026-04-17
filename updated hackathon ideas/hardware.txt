@@ -1,0 +1,58 @@
+Hardware Ideas
+
+1. PillPing
+Concept
+A simple smart pill reminder box with lights, buzzer alerts, and a web or phone dashboard.
+
+Why judges may love it
+Physical demo, clear usefulness, and healthcare angle.
+
+Why it is easy enough
+Basic sensors, timers, LEDs, and simple status tracking are very hackathon-friendly.
+
+MVP
+- reminder light or sound
+- button to confirm medication taken
+- basic dashboard
+- daily log
+
+Wow factor
+A real object helps solve a real daily problem.
+
+2. ClaimScan Station
+Concept
+A document scanning station for clinics or offices that captures paperwork and turns it into structured digital tasks.
+
+Why judges may love it
+Physical and software blend, practical workflow impact.
+
+Why it is easy enough
+Use a camera module or phone plus simple OCR pipeline and dashboard.
+
+MVP
+- scan paper document
+- extract title and due date
+- create digital task card
+- show on dashboard
+
+Wow factor
+Paper chaos becomes organized instantly.
+
+3. QuietLight
+Concept
+A desk light that changes color based on room noise and helps classrooms or shared workspaces stay calm.
+
+Why judges may love it
+Very visual, instant feedback, easy to understand.
+
+Why it is easy enough
+Microphone sensor, LEDs, and a simple threshold system.
+
+MVP
+- detect room volume
+- color feedback
+- simple calm score
+- optional logging
+
+Wow factor
+The whole room can see and react to the system live.
