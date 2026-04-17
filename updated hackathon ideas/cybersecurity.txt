@@ -1,0 +1,76 @@
+Cybersecurity Ideas
+
+1. PhishProof QR
+Concept
+A web app that scans a QR code before the user opens it, expands redirects, checks the destination for phishing or malware risk, and explains why the code looks safe or suspicious.
+
+Why judges may love it
+It is easy to understand, timely, security-focused, and highly demo-friendly. Judges can scan or upload a QR code and instantly see a visible risk analysis rather than a vague security score.
+
+Why it is easy enough
+The MVP can stay narrow:
+- upload or camera scan a QR code
+- decode the URL
+- expand shortened links
+- check risk signals
+- show a safety verdict with explanation
+
+MVP
+- upload QR image or use webcam
+- decode QR destination
+- show final URL and redirect path
+- check for phishing or malware indicators
+- show verdict: safe, caution, suspicious, or dangerous
+- display reasons such as lookalike domain, suspicious TLD, or redirect chain
+
+Wow factor
+The user scans a normal-looking QR code and the app reveals the hidden destination and risk story behind it.
+
+Best hackathon framing
+This is stronger if pitched as more than a scanner. Position it as a trust layer for QR codes that makes invisible threats visible before the user clicks.
+
+Best website pitch
+PhishProof QR helps people inspect QR codes before they trust them. It shows where the code really leads, whether it contains phishing or malware risk, and why.
+
+Stretch features
+- branded safe QR generator
+- domain reputation summary
+- anti-tamper or trusted-business mode
+- educational attack walkthrough
+
+2. LinkLens
+Concept
+A site where users paste suspicious links and get a visual breakdown of redirects, risky patterns, and why a domain may be unsafe.
+
+Why judges may love it
+The analysis is visual and educational, which makes the demo clear.
+
+Why it is easy enough
+No QR support needed for the first version, so the scope stays simpler.
+
+MVP
+- paste link
+- expand redirects
+- show domain summary
+- flag suspicious signals
+
+Wow factor
+An innocent-looking link turns into a visible chain of risk.
+
+3. InboxGuard Demo
+Concept
+A website that takes a suspicious email screenshot or pasted content and highlights signs of phishing for the user.
+
+Why judges may love it
+Very relatable and easy to test live.
+
+Why it is easy enough
+The MVP can focus on rule-based and AI-assisted analysis without trying to become a full email security product.
+
+MVP
+- upload screenshot or paste email text
+- highlight urgency language, spoofed sender clues, suspicious links, and brand mimicry
+- show a simple safety verdict
+
+Wow factor
+The app visually teaches users how scams work in seconds.
