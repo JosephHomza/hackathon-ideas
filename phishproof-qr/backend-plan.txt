@@ -21,18 +21,30 @@ When a backend becomes useful
 2. When you want to cache verdicts
 3. When you want admin analytics
 4. When you want shared blocklists or allowlists
+5. When you want a learned risk model that improves from labeled examples over time
 
 Recommended future backend
 - small API service
 - REST endpoint for URL reputation checks
 - caching layer
 - optional queue for external threat lookups
+- optional scoring service for ML-assisted risk classification
 
 Possible future backend endpoints
 - POST /scan/check
 - GET /domain/reputation
 - GET /domain/history
 - POST /feedback/report
+- POST /model/score
+
+Important product truth
+The app should not promise that it can perfectly tell whether a QR code "has malware." QR codes usually contain actions such as URLs, text, phone numbers, or Wi-Fi payloads. The correct problem is:
+- analyze the destination or action behind the QR code
+- estimate risk
+- check known malicious infrastructure
+- explain suspicious signals
+
+The safest first implementation is heuristics plus reputation data. A trained model can be added later as a scoring layer, but it should assist the verdict rather than replace clear rules and threat lookups.
 
 Recommended backend stack later
 - Node.js or Python
