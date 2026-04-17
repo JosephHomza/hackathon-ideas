@@ -1,0 +1,121 @@
+AI Training Plan
+
+Goal
+Create a realistic path for PhishProof QR to become smarter over time at identifying suspicious QR destinations without pretending it can magically detect all malware from the QR pattern alone.
+
+Important framing
+The app does not really "train on QR codes" in the visual sense first. Most QR codes just encode payloads. What matters is the payload and destination behind the code:
+- website URL
+- redirect chain
+- phone number
+- SMS action
+- email address
+- Wi-Fi configuration
+- contact card
+
+For malware and phishing detection, the strongest target is usually the URL or web destination.
+
+What should be learned
+The model should learn to score risk for the decoded destination based on signals such as:
+1. domain features
+2. redirect behavior
+3. URL structure
+4. known reputation results
+5. hosting or certificate clues
+6. lookalike-brand patterns
+7. user reports and analyst labels
+
+Best first approach
+Version 1 should not depend on AI training.
+Use:
+1. clear heuristics
+2. allowlists and blocklists
+3. safe browsing or threat-intel lookups
+4. redirect analysis
+
+Then add a trained model later to improve ranking and prioritization.
+
+Training data sources
+Potential data inputs:
+1. Public phishing URL datasets
+2. Public malware URL and domain feeds
+3. Safe/benign domain samples from trusted sources
+4. Redirect-chain examples
+5. User-submitted suspicious QR scans
+6. Internal labeled cases from manual review
+
+Useful labels
+Each example should be labeled with something like:
+- safe
+- suspicious
+- phishing
+- malware-related
+- shortener-risk
+- brand-impersonation
+- unknown
+
+Features to extract
+1. Hostname length
+2. Number of subdomains
+3. TLD type
+4. Use of IP address instead of domain
+5. URL encoding or obfuscation
+6. Presence of redirect parameters
+7. Redirect count
+8. Brand-token mismatch
+9. Known reputation hits
+10. Age or novelty signals if available later
+
+Recommended model path
+Start simple:
+1. weighted rules engine
+2. logistic regression or gradient-boosted model on extracted features
+3. calibrated risk score
+
+Do not start with:
+1. a giant black-box model
+2. image-only QR classification
+3. fully autonomous blocking without explanation
+
+How the model should be used
+The learned model should assist, not replace, the main verdict.
+
+Safer architecture:
+1. heuristics produce base score
+2. threat intel adds confirmed signals
+3. learned model adds confidence adjustment
+4. final verdict remains explainable
+
+Example verdict logic
+1. If blocklist hit, mark high risk immediately
+2. If allowlist hit, lower score
+3. If heuristic score is high, warn user
+4. If model confidence is high and agrees with heuristics, strengthen verdict
+5. If model and heuristics disagree, show caution and explanation
+
+Feedback loop
+To improve the system over time:
+1. log decoded destination features
+2. log verdict and risk reasons
+3. log user action such as opened, canceled, or reported
+4. log analyst correction if manually reviewed
+5. add confirmed cases back into the training dataset
+
+Privacy guardrails
+1. Minimize storage of sensitive user data
+2. Prefer hashed or redacted storage where possible
+3. Ask permission before uploading scan data
+4. Separate personal scan history from training data
+
+Hackathon version
+For the hackathon, do not try to build the full training system.
+Instead:
+1. implement strong heuristics
+2. simulate a future learning layer in the architecture
+3. explain that the product can improve with labeled destinations over time
+
+Bottom line
+The realistic product path is:
+camera scan -> decode payload -> analyze destination with heuristics and reputation -> optionally enrich with a learned scorer later
+
+That is much more credible than claiming we can directly train an AI to know which QR codes contain malware just from the image.
