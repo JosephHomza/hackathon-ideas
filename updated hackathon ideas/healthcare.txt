@@ -1,0 +1,59 @@
+Healthcare Ideas
+
+1. ClaimBridge
+Concept
+An AI assistant that turns denial letters and claim paperwork into a clear appeals workflow for healthcare billing teams.
+
+Why judges may love it
+Strong healthcare fit, real admin pain point, and measurable impact.
+
+Why it is easy enough
+The MVP can be document upload, extraction, checklist creation, and timeline display.
+
+MVP
+- upload denial letter
+- extract payer and denial reason
+- show missing requirements
+- generate appeal checklist
+- deadline tracker
+
+Wow factor
+Dense healthcare paperwork becomes a clear path to action.
+
+2. VisitPrep
+Concept
+A patient-facing tool that helps people prepare for doctor visits by organizing symptoms, questions, medications, and history into a single summary.
+
+Why judges may love it
+Patient-centered, easy to demo, and broadly relatable.
+
+Why it is easy enough
+Mostly structured input plus smart summarization and export.
+
+MVP
+- symptom and question input
+- medication list
+- visit summary output
+- printable doctor handoff sheet
+
+Wow factor
+A messy set of thoughts becomes a clean visit-ready brief.
+
+3. MedTranslate
+Concept
+A simple app that rewrites medical instructions into clearer everyday language for patients.
+
+Why judges may love it
+Strong healthcare communication angle and obvious usefulness.
+
+Why it is easy enough
+Text simplification is a manageable scope for a hackathon.
+
+MVP
+- paste medical instructions
+- rewrite in plain language
+- show reading level
+- translate to another language if time allows
+
+Wow factor
+Confusing medical language becomes understandable instantly.
