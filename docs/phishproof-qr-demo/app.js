@@ -3,7 +3,10 @@ const sampleUrls = {
   shortener: "https://bit.ly/3secure-deal",
   lookalike: "https://paypaI-verification-login.com/secure",
   encoded: "https://verify-account-example.net/login?redirect=%68%74%74%70%73%3A%2F%2Fevil.example",
-  malware: "http://download-secure-update.top/update-app/installer.apk?payload=1"
+  malware: "http://download-secure-update.top/update-app/installer.apk?payload=1",
+  fileshare: "https://me-qr.com/r/fake-school-drive",
+  tampered: "https://pay-parking-now-secure.top/pay",
+  vcard: "https://contact-sync-card.info/open?vcard=1&redirect=https://download-secure-update.top/app.apk"
 };
 
 const dom = {
@@ -39,21 +42,13 @@ let lastAnalysis = null;
 
 function normalizeUrl(raw) {
   const trimmed = raw.trim();
-  if (!trimmed) {
-    throw new Error("Paste a URL to analyze.");
-  }
-  if (!/^https?:\/\//i.test(trimmed)) {
-    return new URL(`https://${trimmed}`);
-  }
+  if (!trimmed) throw new Error("Paste a URL to analyze.");
+  if (!/^https?:\/\//i.test(trimmed)) return new URL(`https://${trimmed}`);
   return new URL(trimmed);
 }
 
 function decodeIfNeeded(value) {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
-  }
+  try { return decodeURIComponent(value); } catch { return value; }
 }
 
 function buildRedirectChain(urlString) {
@@ -61,12 +56,18 @@ function buildRedirectChain(urlString) {
   if (urlString.includes("bit.ly")) {
     redirects.push("https://offer-checkpoint.net/landing");
     redirects.push("https://secure-apple-support.help/check");
+  } else if (urlString.includes("me-qr.com") || urlString.includes("qrco.de") || urlString.includes("qrs.ly")) {
+    redirects.push("https://shared-docs-captcha.top/verify-human");
+    redirects.push("https://cdnimg.jeayacrai.in.net/outlook-session-check");
   } else if (urlString.includes("verify-account-example.net")) {
     redirects.push("https://verify-account-example.net/continue");
     redirects.push("https://evil.example/credential-harvest");
   } else if (urlString.includes("update-app")) {
     redirects.push("http://download-secure-update.top/payload/start");
     redirects.push("http://cdn-secure-package.top/app-release.apk");
+  } else if (urlString.includes("pay-parking-now-secure.top")) {
+    redirects.push("https://pay-parking-now-secure.top/session");
+    redirects.push("https://pay-parking-now-secure.top/card-entry");
   } else {
     redirects.push(urlString);
   }
@@ -96,7 +97,8 @@ function analyzeUrl(rawValue) {
     tags.push("Suspicious TLD");
   }
 
-  if (parsed.hostname.includes("bit.ly") || parsed.hostname.includes("tinyurl") || parsed.hostname.includes("t.co")) {
+  const knownShorteners = ["bit.ly", "tinyurl", "t.co", "qrco.de", "me-qr.com", "qrs.ly"];
+  if (knownShorteners.some((domain) => parsed.hostname.includes(domain))) {
     score += 22;
     reasons.push("The link uses a shortener, which hides the real destination.");
     tags.push("Shortener");
@@ -138,6 +140,20 @@ function analyzeUrl(rawValue) {
     tags.push("Hyphen-heavy host");
   }
 
+  const fileShareIndicators = ["drive", "shared", "cdn", "files", "docs", "download"];
+  if (fileShareIndicators.filter((keyword) => lowerUrl.includes(keyword)).length >= 2) {
+    score += 14;
+    reasons.push("The destination looks like a file-sharing or CDN-style flow, which is commonly abused for malware and phishing chains.");
+    tags.push("File-sharing chain");
+  }
+
+  const captchaIndicators = ["captcha", "verify-human", "robot", "recaptcha"];
+  if (captchaIndicators.some((keyword) => lowerUrl.includes(keyword))) {
+    score += 14;
+    reasons.push("The redirect chain includes CAPTCHA-style gating, which attackers often use to make malicious flows look legitimate.");
+    tags.push("CAPTCHA gate");
+  }
+
   const phishingKeywords = ["verify", "secure", "login", "account", "update", "wallet", "password"];
   const keywordHits = phishingKeywords.filter((keyword) => lowerUrl.includes(keyword));
   if (keywordHits.length >= 3) {
@@ -152,6 +168,20 @@ function analyzeUrl(rawValue) {
     score += 20;
     reasons.push("The URL looks like it may be pushing a download or payload delivery flow.");
     tags.push("Malware delivery");
+  }
+
+  const contextKeywords = ["parking", "meter", "menu", "restaurant", "atm", "crypto"];
+  if (contextKeywords.some((keyword) => lowerUrl.includes(keyword))) {
+    score += 10;
+    reasons.push("This looks like a high-risk public QR context such as parking, menus, or payment flows where physical tampering is common.");
+    tags.push("Quishing context");
+  }
+
+  const calendarContactKeywords = ["vcard", "contact", "calendar", "invite", "ics"];
+  if (calendarContactKeywords.some((keyword) => lowerUrl.includes(keyword))) {
+    score += 14;
+    reasons.push("The payload appears to involve contact or calendar content, which can hide malicious URLs or unsafe downloads.");
+    tags.push("Contact/calendar payload");
   }
 
   const redirects = buildRedirectChain(urlString);
@@ -173,13 +203,10 @@ function analyzeUrl(rawValue) {
   }
 
   let verdict = "Safe";
-  if (score >= 65) {
-    verdict = "Dangerous";
-  } else if (score >= 35) {
-    verdict = "Caution";
-  }
+  if (score >= 65) verdict = "Dangerous";
+  else if (score >= 35) verdict = "Caution";
 
-  if (tags.includes("Malware delivery")) {
+  if (tags.includes("Malware delivery") || tags.includes("File-sharing chain")) {
     threatClass = "Possible malware delivery";
   } else if (tags.includes("Lookalike domain") || tags.includes("Embedded credentials") || tags.includes("Phishing keywords")) {
     threatClass = "Likely phishing attempt";
@@ -242,7 +269,6 @@ function renderAnalysis(result) {
   renderList(dom.redirectChain, result.redirects);
   renderList(dom.riskReasons, result.reasons);
   renderList(dom.signalList, result.reasons.slice(0, 3));
-
   dom.scoreValue.textContent = String(Math.max(result.score, 0));
   dom.actionGate.textContent = result.canAutoContinue
     ? "Eligible for low-risk continuation. If safe mode is enabled, the app can move forward without rescanning."
@@ -301,10 +327,7 @@ dom.simulateScanButton.addEventListener("click", () => {
 
 dom.qrImageInput.addEventListener("change", (event) => {
   const [file] = event.target.files || [];
-  if (!file) {
-    return;
-  }
-
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
     dom.previewImage.src = reader.result;
@@ -315,25 +338,18 @@ dom.qrImageInput.addEventListener("change", (event) => {
 });
 
 dom.copyButton.addEventListener("click", async () => {
-  if (!lastAnalysis) {
-    return;
-  }
-
+  if (!lastAnalysis) return;
   try {
     await navigator.clipboard.writeText(lastAnalysis.urlString);
     dom.copyButton.textContent = "Copied";
-    setTimeout(() => {
-      dom.copyButton.textContent = "Copy URL";
-    }, 1200);
+    setTimeout(() => { dom.copyButton.textContent = "Copy URL"; }, 1200);
   } catch {
     window.alert("Clipboard copy failed in this browser.");
   }
 });
 
 dom.continueButton.addEventListener("click", () => {
-  if (!lastAnalysis) {
-    return;
-  }
+  if (!lastAnalysis) return;
   if (!lastAnalysis.canAutoContinue) {
     window.alert("In the real app, higher-risk results would require explicit confirmation before opening.");
     return;
