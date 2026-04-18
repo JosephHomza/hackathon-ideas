@@ -301,6 +301,22 @@ input[type="text"] {
   line-height: 1.5;
 }
 
+.threat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.threat-tag {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 0.78rem;
+}
+
 .sample-block {
   margin-top: 20px;
 }
@@ -417,7 +433,7 @@ input[type="text"] {
 
 .engine-grid {
   display: grid;
-  grid-template-columns: 0.6fr 1fr 0.8fr;
+  grid-template-columns: 0.55fr 1fr 0.75fr 0.7fr;
   gap: 18px;
   margin-top: 18px;
 }
