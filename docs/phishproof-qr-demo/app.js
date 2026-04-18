@@ -2,7 +2,8 @@ const sampleUrls = {
   safe: "https://www.apple.com/iphone",
   shortener: "https://bit.ly/3secure-deal",
   lookalike: "https://paypaI-verification-login.com/secure",
-  encoded: "https://verify-account-example.net/login?redirect=%68%74%74%70%73%3A%2F%2Fevil.example"
+  encoded: "https://verify-account-example.net/login?redirect=%68%74%74%70%73%3A%2F%2Fevil.example",
+  malware: "http://download-secure-update.top/update-app/installer.apk?payload=1"
 };
 
 const dom = {
@@ -21,11 +22,13 @@ const dom = {
   verdictBadge: document.getElementById("verdictBadge"),
   finalUrl: document.getElementById("finalUrl"),
   actionText: document.getElementById("actionText"),
+  threatTags: document.getElementById("threatTags"),
   redirectChain: document.getElementById("redirectChain"),
   riskReasons: document.getElementById("riskReasons"),
   scoreValue: document.getElementById("scoreValue"),
   signalList: document.getElementById("signalList"),
   actionGate: document.getElementById("actionGate"),
+  threatClass: document.getElementById("threatClass"),
   recommendedAction: document.getElementById("recommendedAction"),
   continueButton: document.getElementById("continueButton"),
   copyButton: document.getElementById("copyButton"),
@@ -36,13 +39,21 @@ let lastAnalysis = null;
 
 function normalizeUrl(raw) {
   const trimmed = raw.trim();
-  if (!trimmed) throw new Error("Paste a URL to analyze.");
-  if (!/^https?:\/\//i.test(trimmed)) return new URL(`https://${trimmed}`);
+  if (!trimmed) {
+    throw new Error("Paste a URL to analyze.");
+  }
+  if (!/^https?:\/\//i.test(trimmed)) {
+    return new URL(`https://${trimmed}`);
+  }
   return new URL(trimmed);
 }
 
 function decodeIfNeeded(value) {
-  try { return decodeURIComponent(value); } catch { return value; }
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
 }
 
 function buildRedirectChain(urlString) {
@@ -53,6 +64,9 @@ function buildRedirectChain(urlString) {
   } else if (urlString.includes("verify-account-example.net")) {
     redirects.push("https://verify-account-example.net/continue");
     redirects.push("https://evil.example/credential-harvest");
+  } else if (urlString.includes("update-app")) {
+    redirects.push("http://download-secure-update.top/payload/start");
+    redirects.push("http://cdn-secure-package.top/app-release.apk");
   } else {
     redirects.push(urlString);
   }
@@ -62,54 +76,118 @@ function buildRedirectChain(urlString) {
 function analyzeUrl(rawValue) {
   const parsed = normalizeUrl(rawValue);
   const urlString = parsed.toString();
+  const lowerUrl = urlString.toLowerCase();
   const decodedPath = decodeIfNeeded(`${parsed.pathname}${parsed.search}`);
   const reasons = [];
+  const tags = [];
   let score = 0;
+  let threatClass = "Low-risk web destination";
 
   if (parsed.hostname.match(/^\d{1,3}(\.\d{1,3}){3}$/)) {
     score += 30;
     reasons.push("The QR code points to a raw IP address instead of a recognizable domain.");
+    tags.push("IP host");
   }
+
   const suspiciousTlds = [".zip", ".top", ".click", ".shop", ".help"];
   if (suspiciousTlds.some((tld) => parsed.hostname.endsWith(tld))) {
     score += 18;
     reasons.push("The destination uses a high-risk top-level domain that is often abused.");
+    tags.push("Suspicious TLD");
   }
+
   if (parsed.hostname.includes("bit.ly") || parsed.hostname.includes("tinyurl") || parsed.hostname.includes("t.co")) {
     score += 22;
     reasons.push("The link uses a shortener, which hides the real destination.");
+    tags.push("Shortener");
   }
+
   if (decodedPath !== `${parsed.pathname}${parsed.search}`) {
     score += 12;
     reasons.push("The URL contains encoded characters that can hide the true destination.");
+    tags.push("Encoded URL");
   }
+
   if (/[I1l]{2,}/.test(parsed.hostname) || parsed.hostname.includes("paypaI")) {
     score += 34;
     reasons.push("The domain looks like a brand impersonation attempt or a lookalike typo.");
+    tags.push("Lookalike domain");
   }
+
   if (parsed.search.includes("redirect=")) {
     score += 14;
     reasons.push("The URL contains a redirect parameter, which can conceal the final destination.");
+    tags.push("Redirect parameter");
+  }
+
+  if (parsed.username || parsed.password) {
+    score += 28;
+    reasons.push("The URL contains embedded credentials, which is a classic phishing trick.");
+    tags.push("Embedded credentials");
+  }
+
+  if (parsed.protocol !== "https:") {
+    score += 20;
+    reasons.push("The destination is not using HTTPS, so the connection is less trustworthy.");
+    tags.push("No HTTPS");
+  }
+
+  if ((parsed.hostname.match(/-/g) || []).length >= 3) {
+    score += 10;
+    reasons.push("The hostname uses many hyphens, which is common in throwaway phishing domains.");
+    tags.push("Hyphen-heavy host");
+  }
+
+  const phishingKeywords = ["verify", "secure", "login", "account", "update", "wallet", "password"];
+  const keywordHits = phishingKeywords.filter((keyword) => lowerUrl.includes(keyword));
+  if (keywordHits.length >= 3) {
+    score += 18;
+    reasons.push("The URL combines several urgency or account-related keywords often seen in phishing attacks.");
+    tags.push("Phishing keywords");
+  }
+
+  const malwareKeywords = ["apk", "download", "installer", "update-app", "payload"];
+  const malwareHits = malwareKeywords.filter((keyword) => lowerUrl.includes(keyword));
+  if (malwareHits.length >= 2) {
+    score += 20;
+    reasons.push("The URL looks like it may be pushing a download or payload delivery flow.");
+    tags.push("Malware delivery");
   }
 
   const redirects = buildRedirectChain(urlString);
   if (redirects.length > 2) {
     score += 12;
     reasons.push("The scan leads through multiple redirects before reaching the final page.");
+    tags.push("Multi-hop redirect");
   }
 
   if (parsed.hostname.endsWith("apple.com") || parsed.hostname.endsWith("microsoft.com")) {
     score -= 18;
     reasons.push("The destination matches a well-known domain with a lower apparent risk profile.");
+    tags.push("Trusted brand");
   }
 
   if (reasons.length === 0) {
     reasons.push("No obvious phishing or malware signals were detected in this demo analysis.");
+    tags.push("No major signals");
   }
 
   let verdict = "Safe";
-  if (score >= 65) verdict = "Dangerous";
-  else if (score >= 35) verdict = "Caution";
+  if (score >= 65) {
+    verdict = "Dangerous";
+  } else if (score >= 35) {
+    verdict = "Caution";
+  }
+
+  if (tags.includes("Malware delivery")) {
+    threatClass = "Possible malware delivery";
+  } else if (tags.includes("Lookalike domain") || tags.includes("Embedded credentials") || tags.includes("Phishing keywords")) {
+    threatClass = "Likely phishing attempt";
+  } else if (verdict === "Safe") {
+    threatClass = "Low-risk web destination";
+  } else {
+    threatClass = "Suspicious web destination";
+  }
 
   return {
     verdict,
@@ -117,6 +195,8 @@ function analyzeUrl(rawValue) {
     urlString,
     redirects,
     reasons,
+    tags,
+    threatClass,
     canAutoContinue: verdict === "Safe",
     recommendedAction: verdict === "Safe"
       ? "No suspicious signals were found in the demo analysis. You can continue to the destination."
@@ -133,6 +213,16 @@ function renderList(listElement, values) {
   });
 }
 
+function renderTags(tags) {
+  dom.threatTags.innerHTML = "";
+  tags.forEach((tag) => {
+    const chip = document.createElement("span");
+    chip.className = "threat-tag";
+    chip.textContent = tag;
+    dom.threatTags.appendChild(chip);
+  });
+}
+
 function renderAnalysis(result) {
   lastAnalysis = result;
   dom.resultsSection.classList.remove("hidden");
@@ -142,21 +232,28 @@ function renderAnalysis(result) {
   dom.verdictBadge.classList.add(
     result.verdict === "Safe" ? "verdict-safe" : result.verdict === "Caution" ? "verdict-caution" : "verdict-dangerous"
   );
+
   dom.finalUrl.textContent = result.urlString;
   dom.actionText.textContent = result.canAutoContinue
     ? "Decoded action: open website. This can be continued from the same screen."
     : "Decoded action: website link. Manual review is recommended before continuing.";
+
+  renderTags(result.tags);
   renderList(dom.redirectChain, result.redirects);
   renderList(dom.riskReasons, result.reasons);
   renderList(dom.signalList, result.reasons.slice(0, 3));
+
   dom.scoreValue.textContent = String(Math.max(result.score, 0));
   dom.actionGate.textContent = result.canAutoContinue
     ? "Eligible for low-risk continuation. If safe mode is enabled, the app can move forward without rescanning."
     : "Manual approval required. The app should pause and explain the risk before any action executes.";
+  dom.threatClass.textContent = result.threatClass;
+
   dom.recommendedAction.textContent = result.recommendedAction;
   dom.continueButton.textContent = result.canAutoContinue && dom.autoContinueToggle.checked
     ? "Auto-continue triggered"
     : "Continue safely";
+
   if (result.canAutoContinue && dom.autoContinueToggle.checked) {
     dom.recommendedAction.textContent = "Safe mode is enabled, so the app would continue automatically without a second scan.";
   }
@@ -204,7 +301,10 @@ dom.simulateScanButton.addEventListener("click", () => {
 
 dom.qrImageInput.addEventListener("change", (event) => {
   const [file] = event.target.files || [];
-  if (!file) return;
+  if (!file) {
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = () => {
     dom.previewImage.src = reader.result;
@@ -215,18 +315,25 @@ dom.qrImageInput.addEventListener("change", (event) => {
 });
 
 dom.copyButton.addEventListener("click", async () => {
-  if (!lastAnalysis) return;
+  if (!lastAnalysis) {
+    return;
+  }
+
   try {
     await navigator.clipboard.writeText(lastAnalysis.urlString);
     dom.copyButton.textContent = "Copied";
-    setTimeout(() => { dom.copyButton.textContent = "Copy URL"; }, 1200);
+    setTimeout(() => {
+      dom.copyButton.textContent = "Copy URL";
+    }, 1200);
   } catch {
     window.alert("Clipboard copy failed in this browser.");
   }
 });
 
 dom.continueButton.addEventListener("click", () => {
-  if (!lastAnalysis) return;
+  if (!lastAnalysis) {
+    return;
+  }
   if (!lastAnalysis.canAutoContinue) {
     window.alert("In the real app, higher-risk results would require explicit confirmation before opening.");
     return;
