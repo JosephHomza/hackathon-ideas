@@ -40,6 +40,7 @@ body {
 }
 
 .hero,
+.airdrop-panel,
 .scanner-panel,
 .results-panel {
   border: 1px solid var(--line);
@@ -73,6 +74,7 @@ body {
 
 .hero-text,
 .story-card p,
+.airdrop-copy,
 .visual-copy,
 .result-support,
 .decision-text {
@@ -132,6 +134,7 @@ body {
 
 .hero-card,
 .story-card,
+.airdrop-card,
 .scanner-card,
 .result-card,
 .toggle-card {
@@ -142,6 +145,7 @@ body {
 
 .hero-card,
 .story-card,
+.airdrop-card,
 .scanner-card,
 .result-card {
   padding: 22px;
@@ -151,6 +155,7 @@ body {
 .visual-label,
 .sample-title,
 .decision-label,
+.tier-rank,
 .engine-label {
   color: var(--accent);
   font-size: 0.82rem;
@@ -172,6 +177,7 @@ body {
 }
 
 .scanner-panel,
+.airdrop-panel,
 .results-panel {
   padding: 28px;
   margin-top: 20px;
@@ -249,6 +255,119 @@ input[type="text"] {
   background: rgba(255, 255, 255, 0.05);
   color: var(--text);
   font: inherit;
+}
+
+.airdrop-grid {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, minmax(0, 0.9fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.featured-airdrop-card {
+  background:
+    radial-gradient(circle at top right, rgba(103, 242, 200, 0.12), transparent 38%),
+    var(--panel-strong);
+}
+
+.airdrop-card h3 {
+  margin: 8px 0 10px;
+  font-size: 1.35rem;
+}
+
+.airdrop-card label {
+  display: block;
+  margin: 18px 0 10px;
+  font-weight: 700;
+}
+
+.airdrop-status,
+.tier-reward,
+.profile-tier {
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(103, 242, 200, 0.22);
+  background: rgba(103, 242, 200, 0.08);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.airdrop-status.signed-in {
+  color: var(--safe);
+  border-color: rgba(80, 227, 164, 0.3);
+  background: rgba(80, 227, 164, 0.12);
+}
+
+.google-signin-slot {
+  margin-top: 16px;
+}
+
+.google-button {
+  display: none;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 13px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #edf4ff;
+  color: #09111f;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.google-button.is-visible {
+  display: inline-flex;
+}
+
+.google-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #09111f;
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.airdrop-profile {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.profile-line {
+  margin: 6px 0;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.profile-tier {
+  display: inline-block;
+  margin: 10px 0 0;
+}
+
+.tier-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 230px;
+}
+
+.tier-card p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.tier-reward {
+  margin-top: auto;
+  width: fit-content;
 }
 
 .scan-mode-bar,
@@ -461,6 +580,7 @@ input[type="text"] {
 @media (max-width: 900px) {
   .hero,
   .story-grid,
+  .airdrop-grid,
   .scanner-grid,
   .results-grid,
   .panel-header,
