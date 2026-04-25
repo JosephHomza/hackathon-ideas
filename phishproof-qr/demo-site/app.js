@@ -4,14 +4,19 @@ const sampleUrls = {
   lookalike: "https://paypaI-verification-login.com/secure",
   encoded: "https://verify-account-example.net/login?redirect=%68%74%74%70%73%3A%2F%2Fevil.example",
   malware: "http://download-secure-update.top/update-app/installer.apk?payload=1",
-  fileshare: "https://me-qr.com/r/fake-school-drive",
-  tampered: "https://pay-parking-now-secure.top/pay",
-  vcard: "https://contact-sync-card.info/open?vcard=1&redirect=https://download-secure-update.top/app.apk"
+  wifi: "WIFI:T:WPA;S:Airport_Free_WiFi;P:guest1234;H:false;;",
+  vcard: "BEGIN:VCARD\nVERSION:3.0\nFN:IT Help Desk\nTEL:+18005550123\nURL:https://verify-account-example.net/login\nEND:VCARD",
+  sms: "SMSTO:5551234:VERIFY your account at https://paypaI-verification-login.com/secure",
+  crypto: "solana:Bpdt7Hey78HeEEr9Q6x19gYAns5n6w44LdjJhxN3pump?amount=2.5&label=SafeScan%20Claim",
+  json: "{\"type\":\"airdrop\",\"ref\":\"SAFE-DEMO\",\"action\":\"open\",\"url\":\"https://bit.ly/3secure-deal\"}"
 };
 
 const GOOGLE_CLIENT_ID = "PASTE_YOUR_GOOGLE_CLIENT_ID_HERE";
 const AIRDROP_REGISTER_ENDPOINT = "";
+const PUBLIC_SITE_URL = "https://josephhomza.github.io/hackathon-ideas/phishproof-qr-demo/";
 const AIRDROP_STORAGE_KEY = "phishproofAirdropProfile";
+const REFERRAL_STORAGE_KEY = "safescanIncomingReferral";
+const REFERRAL_ATTRIBUTIONS_STORAGE_KEY = "safescanReferralAttributions";
 let googleInitAttempts = 0;
 
 const dom = {
@@ -41,6 +46,8 @@ const dom = {
   continueButton: document.getElementById("continueButton"),
   copyButton: document.getElementById("copyButton"),
   autoContinueToggle: document.getElementById("autoContinueToggle"),
+  tokenAddress: document.getElementById("tokenAddress"),
+  copyTokenAddressButton: document.getElementById("copyTokenAddressButton"),
   googleSignInButton: document.getElementById("googleSignInButton"),
   demoGoogleButton: document.getElementById("demoGoogleButton"),
   airdropStatus: document.getElementById("airdropStatus"),
@@ -51,11 +58,31 @@ const dom = {
   signOutButton: document.getElementById("signOutButton"),
   demoAccountModal: document.getElementById("demoAccountModal"),
   closeAccountModal: document.getElementById("closeAccountModal"),
-  accountOptions: Array.from(document.querySelectorAll(".account-option"))
+  accountOptions: Array.from(document.querySelectorAll(".account-option")),
+  currentTierName: document.getElementById("currentTierName"),
+  currentTierSummary: document.getElementById("currentTierSummary"),
+  scanProgressValue: document.getElementById("scanProgressValue"),
+  referralProgressValue: document.getElementById("referralProgressValue"),
+  walletStatus: document.getElementById("walletStatus"),
+  connectWalletButton: document.getElementById("connectWalletButton"),
+  demoWalletButton: document.getElementById("demoWalletButton"),
+  referralLink: document.getElementById("referralLink"),
+  incomingReferral: document.getElementById("incomingReferral"),
+  referralAttribution: document.getElementById("referralAttribution"),
+  copyReferralButton: document.getElementById("copyReferralButton"),
+  shareReferralButton: document.getElementById("shareReferralButton"),
+  demoReferralButton: document.getElementById("demoReferralButton"),
+  tierOneCard: document.getElementById("tierOneCard"),
+  tierTwoCard: document.getElementById("tierTwoCard"),
+  tierThreeCard: document.getElementById("tierThreeCard")
 };
 
 let lastAnalysis = null;
 let scanCount = Number(window.localStorage.getItem("phishproofScanCount") || "0");
+
+function isUrlLike(value) {
+  return /^https?:\/\//i.test(value) || /^[a-z0-9.-]+\.[a-z]{2,}(\/|$)/i.test(value);
+}
 
 function normalizeUrl(raw) {
   const trimmed = raw.trim();
@@ -89,6 +116,27 @@ function buildRedirectChain(urlString) {
     redirects.push(urlString);
   }
   return redirects;
+}
+
+function detectPayload(rawValue) {
+  const raw = rawValue.trim();
+  const upper = raw.toUpperCase();
+
+  if (!raw) throw new Error("Paste decoded QR text to analyze.");
+  if (isUrlLike(raw)) return { type: "URL", action: "Open website", normalized: normalizeUrl(raw).toString() };
+  if (upper.startsWith("WIFI:")) return { type: "Wi-Fi", action: "Join Wi-Fi network", normalized: raw };
+  if (upper.includes("BEGIN:VCARD")) return { type: "Contact card", action: "Import contact", normalized: raw };
+  if (upper.startsWith("SMSTO:") || upper.startsWith("SMS:")) return { type: "SMS", action: "Open prefilled text message", normalized: raw };
+  if (upper.startsWith("MAILTO:")) return { type: "Email", action: "Open prefilled email", normalized: raw };
+  if (upper.startsWith("SOLANA:") || upper.startsWith("BITCOIN:") || upper.startsWith("ETHEREUM:")) return { type: "Crypto/payment", action: "Open wallet or payment request", normalized: raw };
+  if (upper.startsWith("BEGIN:VEVENT") || upper.includes("BEGIN:VCALENDAR")) return { type: "Calendar", action: "Add calendar event", normalized: raw };
+
+  try {
+    JSON.parse(raw);
+    return { type: "JSON/custom", action: "Run app-specific data flow", normalized: raw };
+  } catch {
+    return { type: "Plain text", action: "Display text payload", normalized: raw };
+  }
 }
 
 function analyzeUrl(rawValue) {
@@ -248,6 +296,101 @@ function analyzeUrl(rawValue) {
   };
 }
 
+function analyzePayload(rawValue) {
+  const payload = detectPayload(rawValue);
+  if (payload.type === "URL") return analyzeUrl(payload.normalized);
+
+  const lowerPayload = payload.normalized.toLowerCase();
+  const reasons = [];
+  const tags = [payload.type];
+  const actions = [payload.action, payload.normalized];
+  let score = 0;
+  let threatClass = `${payload.type} payload`;
+
+  if (payload.type === "Wi-Fi") {
+    score += 16;
+    reasons.push("The QR code attempts to join a Wi-Fi network, which can route traffic through an untrusted network.");
+    tags.push("Network join");
+    if (lowerPayload.includes("nopass") || lowerPayload.includes("t:;")) {
+      score += 14;
+      reasons.push("The Wi-Fi payload appears to use no password or an unclear security type.");
+      tags.push("Open network");
+    }
+  }
+
+  if (payload.type === "Contact card") {
+    score += 12;
+    reasons.push("The QR code tries to add contact details. Contact cards can hide links, phone numbers, or impersonated support identities.");
+    tags.push("Contact import");
+  }
+
+  if (payload.type === "SMS" || payload.type === "Email") {
+    score += 18;
+    reasons.push("The QR code opens a prefilled message, which can trick users into sending sensitive information or subscribing to unwanted messages.");
+    tags.push("Prefilled message");
+  }
+
+  if (payload.type === "Crypto/payment") {
+    score += 32;
+    reasons.push("The QR code opens a wallet or payment request. Any transfer should require manual review before approval.");
+    tags.push("Payment request");
+  }
+
+  if (payload.type === "Calendar") {
+    score += 14;
+    reasons.push("Calendar invites can hide URLs, reminders, or social-engineering instructions.");
+    tags.push("Calendar import");
+  }
+
+  if (payload.type === "JSON/custom") {
+    score += 18;
+    reasons.push("The QR code contains app-specific structured data. SafeScan should show the fields before any app acts on them.");
+    tags.push("Structured payload");
+  }
+
+  if (payload.type === "Plain text") {
+    reasons.push("The QR code contains plain text and does not directly request a browser, wallet, message, contact, calendar, or Wi-Fi action.");
+    tags.push("No direct action");
+  }
+
+  const embeddedUrls = payload.normalized.match(/https?:\/\/[^\s"<>]+/gi) || [];
+  embeddedUrls.forEach((url) => {
+    const urlResult = analyzeUrl(url);
+    score += Math.min(urlResult.score, 45);
+    reasons.push(`Embedded link found: ${url}`);
+    reasons.push(...urlResult.reasons.slice(0, 2));
+    tags.push(...urlResult.tags.slice(0, 3));
+    actions.push(`Embedded link: ${url}`);
+    if (urlResult.threatClass !== "Low-risk web destination") threatClass = urlResult.threatClass;
+  });
+
+  const sensitiveWords = ["password", "verify", "login", "wallet", "seed", "recovery", "bank", "urgent"];
+  const sensitiveHits = sensitiveWords.filter((word) => lowerPayload.includes(word));
+  if (sensitiveHits.length >= 2) {
+    score += 18;
+    reasons.push("The payload includes urgency, credential, payment, or wallet language commonly used in social engineering.");
+    tags.push("Social engineering text");
+  }
+
+  const uniqueTags = [...new Set(tags)];
+  const verdict = score >= 65 ? "Dangerous" : score >= 35 ? "Caution" : "Safe";
+  const canAutoContinue = verdict === "Safe" && ["Plain text"].includes(payload.type);
+
+  return {
+    verdict,
+    score,
+    urlString: payload.normalized,
+    redirects: actions,
+    reasons,
+    tags: uniqueTags,
+    threatClass,
+    canAutoContinue,
+    recommendedAction: canAutoContinue
+      ? "This payload does not request a sensitive action. You can view it safely."
+      : "Pause before continuing. Review the decoded payload and only proceed if you trust the source and action."
+  };
+}
+
 function renderList(listElement, values) {
   listElement.innerHTML = "";
   values.forEach((value) => {
@@ -269,9 +412,6 @@ function renderTags(tags) {
 
 function renderAnalysis(result) {
   lastAnalysis = result;
-  scanCount += 1;
-  window.localStorage.setItem("phishproofScanCount", String(scanCount));
-  updateAirdropTier();
   dom.resultsSection.classList.remove("hidden");
   dom.resultTitle.textContent = result.verdict === "Safe" ? "Low-risk result" : `${result.verdict} result`;
   dom.verdictBadge.textContent = result.verdict;
@@ -282,8 +422,8 @@ function renderAnalysis(result) {
 
   dom.finalUrl.textContent = result.urlString;
   dom.actionText.textContent = result.canAutoContinue
-    ? "Decoded action: open website. This can be continued from the same screen."
-    : "Decoded action: website link. Manual review is recommended before continuing.";
+    ? "Decoded action: low-risk payload. This can be continued from the same screen."
+    : "Decoded action: sensitive or external action. Manual review is recommended before continuing.";
 
   renderTags(result.tags);
   renderList(dom.redirectChain, result.redirects);
@@ -306,16 +446,89 @@ function renderAnalysis(result) {
 }
 
 function getAirdropTier() {
-  if (scanCount >= 3) {
+  const profile = getStoredAirdropProfile();
+  const referralCount = profile?.referralCount || 0;
+
+  if (referralCount >= 3 && scanCount >= 50) {
     return {
-      name: "Tier 2: Verifier",
-      description: "2x allocation unlocked after analyzing three QR examples."
+      name: "Tier 3: Guardian",
+      description: "5x allocation unlocked with multiple referrals and 50 QR scans."
     };
   }
+
+  if (referralCount >= 1) {
+    return {
+      name: "Tier 2: Referrer",
+      description: "2x allocation unlocked after your first referral."
+    };
+  }
+
+  if (profile && scanCount >= 5) {
+    return {
+      name: "Tier 1: Scanner",
+      description: "Base allocation unlocked after account creation and 5 QR scans."
+    };
+  }
+
+  if (profile) {
+    return {
+      name: "Registered",
+      description: "Scan 5 QR codes to unlock Tier 1."
+    };
+  }
+
   return {
-    name: "Tier 1: Scanner",
-    description: "Base allocation unlocked after Google registration."
+    name: "Not registered",
+    description: "Sign in to start earning airdrop progress."
   };
+}
+
+function getReferralCode(profile) {
+  const source = profile.googleSubject || profile.email || "safescan-user";
+  let hash = 0;
+  for (let index = 0; index < source.length; index += 1) {
+    hash = ((hash << 5) - hash + source.charCodeAt(index)) | 0;
+  }
+  return `SAFE-${Math.abs(hash).toString(36).toUpperCase()}`;
+}
+
+function buildReferralLink(profile) {
+  const url = new URL(PUBLIC_SITE_URL);
+  url.searchParams.set("ref", profile.referralCode || getReferralCode(profile));
+  url.hash = "airdrop";
+  return url.toString();
+}
+
+function captureIncomingReferral() {
+  const params = new URLSearchParams(window.location.search);
+  const referralCode = params.get("ref")?.trim();
+  if (referralCode) window.localStorage.setItem(REFERRAL_STORAGE_KEY, referralCode);
+  return referralCode || window.localStorage.getItem(REFERRAL_STORAGE_KEY);
+}
+
+function getReferralAttributions() {
+  try {
+    return JSON.parse(window.localStorage.getItem(REFERRAL_ATTRIBUTIONS_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveReferralAttribution(profile) {
+  if (!profile.referredBy) return;
+
+  const attributions = getReferralAttributions();
+  const alreadySaved = attributions.some((item) => item.referredEmail === profile.email);
+  if (alreadySaved) return;
+
+  attributions.push({
+    referrerCode: profile.referredBy,
+    referredEmail: profile.email,
+    referredName: profile.name,
+    referredGoogleSubject: profile.googleSubject,
+    referredAt: profile.registeredAt
+  });
+  window.localStorage.setItem(REFERRAL_ATTRIBUTIONS_STORAGE_KEY, JSON.stringify(attributions));
 }
 
 function decodeJwtPayload(token) {
@@ -336,13 +549,37 @@ function getStoredAirdropProfile() {
 
 async function saveAirdropProfile(profile) {
   window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(profile));
+  saveReferralAttribution(profile);
 
   if (!AIRDROP_REGISTER_ENDPOINT) return;
 
   await fetch(AIRDROP_REGISTER_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(profile)
+    body: JSON.stringify({
+      ...profile,
+      accountLink: {
+        email: profile.email,
+        googleSubject: profile.googleSubject,
+        walletAddress: profile.walletAddress || null,
+        walletProvider: profile.walletProvider || null
+      },
+      referralCredit: profile.referredBy
+        ? {
+            creditToReferralCode: profile.referredBy,
+            creditedByEmail: profile.email,
+            creditedByGoogleSubject: profile.googleSubject,
+            creditedAt: profile.registeredAt
+          }
+        : null,
+      referralAttribution: profile.referredBy
+        ? {
+            referrerCode: profile.referredBy,
+            referredEmail: profile.email,
+            referredGoogleSubject: profile.googleSubject
+          }
+        : null
+    })
   });
 }
 
@@ -352,6 +589,7 @@ function renderAirdropProfile(profile) {
     dom.airdropStatus.classList.remove("signed-in");
     dom.airdropProfile.classList.add("hidden");
     dom.googleSignInButton.classList.remove("hidden");
+    updateAirdropProgress();
     return;
   }
 
@@ -364,15 +602,116 @@ function renderAirdropProfile(profile) {
   dom.profileName.textContent = `Name: ${profile.name}`;
   dom.profileEmail.textContent = `Email: ${profile.email}`;
   dom.profileTier.textContent = tier.name;
+  renderWalletState(profile);
+  updateAirdropProgress();
 }
 
-function updateAirdropTier() {
+function renderWalletState(profile = getStoredAirdropProfile()) {
+  if (!profile) {
+    dom.walletStatus.textContent = "Sign in, then connect your Solana wallet.";
+    dom.connectWalletButton.disabled = false;
+    dom.demoWalletButton.disabled = false;
+    return;
+  }
+
+  if (profile.walletAddress) {
+    dom.walletStatus.textContent = profile.walletAddress;
+    dom.connectWalletButton.textContent = "Wallet connected";
+    dom.connectWalletButton.disabled = true;
+    dom.demoWalletButton.disabled = true;
+    return;
+  }
+
+  dom.walletStatus.textContent = "No wallet connected yet.";
+  dom.connectWalletButton.textContent = "Connect wallet";
+  dom.connectWalletButton.disabled = false;
+  dom.demoWalletButton.disabled = false;
+}
+
+async function attachWalletToProfile(walletAddress, provider = "solana") {
   const profile = getStoredAirdropProfile();
-  if (!profile) return;
-  const tier = getAirdropTier();
-  const updatedProfile = { ...profile, tier: tier.name, tierDescription: tier.description };
-  window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(updatedProfile));
+  if (!profile) {
+    window.alert("Sign in with Google before connecting a wallet.");
+    return;
+  }
+
+  const updatedProfile = {
+    ...profile,
+    walletAddress,
+    walletProvider: provider,
+    walletConnectedAt: new Date().toISOString()
+  };
+
+  await saveAirdropProfile(updatedProfile);
   renderAirdropProfile(updatedProfile);
+}
+
+function getSolanaWalletProvider() {
+  const providers = [];
+  if (window.phantom?.solana) providers.push({ name: "phantom", provider: window.phantom.solana });
+  if (window.solflare) providers.push({ name: "solflare", provider: window.solflare });
+  if (window.braveSolana) providers.push({ name: "brave", provider: window.braveSolana });
+  if (window.solana) {
+    const providerName = window.solana.isPhantom
+      ? "phantom"
+      : window.solana.isSolflare
+        ? "solflare"
+        : window.solana.isBraveWallet
+          ? "brave"
+          : "solana";
+    providers.push({ name: providerName, provider: window.solana });
+  }
+
+  return providers.find(({ provider }) => provider?.connect) || null;
+}
+
+function updateAirdropProgress() {
+  const profile = getStoredAirdropProfile();
+  const tier = getAirdropTier();
+  const referralCount = profile?.referralCount || 0;
+  const incomingReferral = captureIncomingReferral();
+  const tierCards = [dom.tierOneCard, dom.tierTwoCard, dom.tierThreeCard];
+  const unlocked = [
+    Boolean(profile && scanCount >= 5),
+    referralCount >= 1,
+    referralCount >= 3 && scanCount >= 50
+  ];
+
+  dom.currentTierName.textContent = tier.name;
+  dom.currentTierSummary.textContent = tier.description;
+  dom.scanProgressValue.textContent = `${scanCount} / ${scanCount >= 50 ? 50 : 5}`;
+  dom.referralProgressValue.textContent = String(referralCount);
+
+  tierCards.forEach((card, index) => {
+    card.classList.toggle("unlocked", unlocked[index]);
+    card.classList.remove("current");
+  });
+
+  if (tier.name.includes("Tier 3")) dom.tierThreeCard.classList.add("current");
+  else if (tier.name.includes("Tier 2")) dom.tierTwoCard.classList.add("current");
+  else if (tier.name.includes("Tier 1")) dom.tierOneCard.classList.add("current");
+
+  if (profile) {
+    const referralCode = profile.referralCode || getReferralCode(profile);
+    const updatedProfile = { ...profile, referralCode, tier: tier.name, tierDescription: tier.description };
+    window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(updatedProfile));
+    dom.referralLink.textContent = buildReferralLink(updatedProfile);
+
+    if (updatedProfile.referredBy) {
+      dom.referralAttribution.classList.remove("hidden");
+      dom.referralAttribution.textContent = `This account was referred by ${updatedProfile.referredBy}.`;
+    } else {
+      dom.referralAttribution.classList.add("hidden");
+    }
+  } else {
+    dom.referralLink.textContent = "Sign in to generate your link.";
+    dom.referralAttribution.classList.add("hidden");
+  }
+
+  if (incomingReferral) {
+    dom.incomingReferral.classList.remove("hidden");
+    dom.incomingReferral.textContent = `Referral detected: ${incomingReferral}. If this user signs in, that referrer code is saved with their account.`;
+  }
 }
 
 async function registerAirdropUser(googleProfile) {
@@ -382,10 +721,16 @@ async function registerAirdropUser(googleProfile) {
   }
 
   const tier = getAirdropTier();
+  const incomingReferral = captureIncomingReferral();
+  const referralCode = getReferralCode(googleProfile);
+  const referredBy = incomingReferral && incomingReferral !== referralCode ? incomingReferral : null;
   const profile = {
     email: googleProfile.email,
     name: googleProfile.name || googleProfile.email,
     googleSubject: googleProfile.sub || "demo-google-user",
+    referralCode,
+    referralCount: 0,
+    referredBy,
     tier: tier.name,
     tierDescription: tier.description,
     registeredAt: new Date().toISOString()
@@ -462,10 +807,17 @@ function initGoogleSignIn() {
   });
 }
 
-function runAnalysis() {
+function recordScan() {
+  scanCount += 1;
+  window.localStorage.setItem("phishproofScanCount", String(scanCount));
+  updateAirdropProgress();
+}
+
+function runAnalysis({ countScan = true } = {}) {
   try {
-    dom.scanStatus.textContent = "QR decoded. Running destination analysis and risk checks.";
-    const result = analyzeUrl(dom.urlInput.value);
+    dom.scanStatus.textContent = "QR decoded. Classifying payload and running risk checks.";
+    const result = analyzePayload(dom.urlInput.value);
+    if (countScan) recordScan();
     renderAnalysis(result);
     dom.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
@@ -480,14 +832,14 @@ dom.clearButton.addEventListener("click", () => {
   dom.resultsSection.classList.add("hidden");
   dom.uploadPreview.classList.add("hidden");
   dom.previewImage.removeAttribute("src");
-  dom.scanStatus.textContent = "Waiting for a scan or pasted QR destination.";
+  dom.scanStatus.textContent = "Waiting for a scan or pasted QR payload.";
   lastAnalysis = null;
 });
 
 dom.sampleButtons.forEach((button) => {
   button.addEventListener("click", () => {
     dom.urlInput.value = sampleUrls[button.dataset.sample];
-    runAnalysis();
+    runAnalysis({ countScan: false });
   });
 });
 
@@ -498,7 +850,7 @@ dom.simulateScanButton.addEventListener("click", () => {
   window.setTimeout(() => {
     dom.scanStatus.textContent = "QR payload found. Preparing safety analysis.";
     dom.qrFrame.classList.remove("scanning");
-    runAnalysis();
+    runAnalysis({ countScan: false });
   }, 1400);
 });
 
@@ -519,7 +871,17 @@ dom.copyButton.addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(lastAnalysis.urlString);
     dom.copyButton.textContent = "Copied";
-    setTimeout(() => { dom.copyButton.textContent = "Copy URL"; }, 1200);
+    setTimeout(() => { dom.copyButton.textContent = "Copy payload"; }, 1200);
+  } catch {
+    window.alert("Clipboard copy failed in this browser.");
+  }
+});
+
+dom.copyTokenAddressButton.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(dom.tokenAddress.textContent);
+    dom.copyTokenAddressButton.textContent = "Copied";
+    setTimeout(() => { dom.copyTokenAddressButton.textContent = "Copy"; }, 1200);
   } catch {
     window.alert("Clipboard copy failed in this browser.");
   }
@@ -528,10 +890,10 @@ dom.copyButton.addEventListener("click", async () => {
 dom.continueButton.addEventListener("click", () => {
   if (!lastAnalysis) return;
   if (!lastAnalysis.canAutoContinue) {
-    window.alert("In the real app, higher-risk results would require explicit confirmation before opening.");
+    window.alert("In the real app, sensitive QR payloads would require explicit confirmation before any action runs.");
     return;
   }
-  window.alert(`Demo action: continue to ${lastAnalysis.urlString}`);
+  window.alert(`Demo action: continue with ${lastAnalysis.urlString}`);
 });
 
 dom.demoGoogleButton.addEventListener("click", () => {
@@ -558,8 +920,88 @@ dom.demoAccountModal.addEventListener("click", (event) => {
 dom.signOutButton.addEventListener("click", () => {
   window.localStorage.removeItem(AIRDROP_STORAGE_KEY);
   renderAirdropProfile(null);
+  renderWalletState(null);
   initGoogleSignIn();
 });
 
+dom.connectWalletButton.addEventListener("click", async () => {
+  const profile = getStoredAirdropProfile();
+  if (!profile) {
+    window.alert("Sign in with Google before connecting a wallet.");
+    return;
+  }
+
+  const detectedWallet = getSolanaWalletProvider();
+  if (!detectedWallet) {
+    window.alert("No Phantom, Solflare, or Brave Solana wallet was detected. Install a wallet or use the demo wallet for local testing.");
+    return;
+  }
+
+  try {
+    const response = await detectedWallet.provider.connect();
+    const publicKey = response?.publicKey || detectedWallet.provider.publicKey;
+    await attachWalletToProfile(publicKey.toString(), detectedWallet.name);
+  } catch {
+    window.alert("Wallet connection was cancelled or failed.");
+  }
+});
+
+dom.demoWalletButton.addEventListener("click", () => {
+  attachWalletToProfile("DemoSQRWallet11111111111111111111111111111", "demo");
+});
+
+dom.copyReferralButton.addEventListener("click", async () => {
+  const profile = getStoredAirdropProfile();
+  if (!profile) {
+    window.alert("Sign in first to generate your referral link.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(buildReferralLink(profile));
+    dom.copyReferralButton.textContent = "Copied";
+    setTimeout(() => { dom.copyReferralButton.textContent = "Copy referral"; }, 1200);
+  } catch {
+    window.alert("Clipboard copy failed in this browser.");
+  }
+});
+
+dom.shareReferralButton.addEventListener("click", async () => {
+  const profile = getStoredAirdropProfile();
+  if (!profile) {
+    window.alert("Sign in first to share your referral link.");
+    return;
+  }
+
+  const referralLink = buildReferralLink(profile);
+  if (navigator.share) {
+    await navigator.share({
+      title: "Join the SafeScan QR airdrop",
+      text: "Register for SafeScan QR and start earning airdrop tiers.",
+      url: referralLink
+    });
+    return;
+  }
+
+  await navigator.clipboard.writeText(referralLink);
+  window.alert("Referral link copied.");
+});
+
+dom.demoReferralButton.addEventListener("click", () => {
+  const profile = getStoredAirdropProfile();
+  if (!profile) {
+    window.alert("Sign in first to track referrals.");
+    return;
+  }
+
+  const updatedProfile = {
+    ...profile,
+    referralCount: (profile.referralCount || 0) + 1
+  };
+  window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(updatedProfile));
+  renderAirdropProfile(updatedProfile);
+});
+
+captureIncomingReferral();
 renderAirdropProfile(getStoredAirdropProfile());
 window.addEventListener("load", initGoogleSignIn);

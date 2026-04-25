@@ -75,9 +75,9 @@
         <p class="eyebrow">Cybersecurity Hackathon Demo</p>
         <h1>SafeScan QR</h1>
         <p class="hero-text">
-          Scan once, inspect the hidden destination, and safely continue without rescanning.
-          This demo simulates the experience of a QR safety app that exposes phishing signals
-          before a user opens the link.
+          Scan once, inspect the hidden payload, and safely continue without rescanning.
+          This demo shows how a QR safety app can explain links, Wi-Fi joins, contacts,
+          messages, payments, and app actions before anything runs.
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#scanner">Try the demo</a>
@@ -89,8 +89,9 @@
         <div class="hero-card-label">Demo focus</div>
         <ul>
           <li>Built around iPhone scanning behavior</li>
-          <li>Reveal the true destination</li>
-          <li>Score phishing and malware risk signals</li>
+          <li>Reveal the full decoded QR payload</li>
+          <li>Classify links, Wi-Fi, contact cards, messages, crypto, and text</li>
+          <li>Score phishing, privacy, payment, and malware risk signals</li>
           <li>Auto-continue safe actions when enabled</li>
         </ul>
       </div>
@@ -100,11 +101,11 @@
       <section class="story-grid" id="story">
         <article class="story-card">
           <h2>What problem are we solving?</h2>
-          <p>QR codes hide the destination until after a scan. That makes phishing attacks easy to disguise as menus, parking meters, tickets, and event links.</p>
+          <p>QR codes hide their payload until after a scan. That makes unsafe links, Wi-Fi joins, contact cards, payment requests, and app actions easy to disguise.</p>
         </article>
         <article class="story-card">
           <h2>What makes this different?</h2>
-          <p>Instead of immediately opening the QR destination, SafeScan QR explains why a link looks safe or suspicious and lets the user continue from the same screen.</p>
+          <p>Instead of immediately opening or executing a QR action, SafeScan QR explains what the payload wants to do and why it looks safe or suspicious.</p>
         </article>
         <article class="story-card">
           <h2>How does scanning work?</h2>
@@ -127,34 +128,85 @@
 
         <div class="token-strip">
           <div>
-            <p class="token-label">Token</p>
-            <h3>Safescan</h3>
+            <p class="token-label">Token name</p>
+            <p class="token-pill">SafeScan</p>
+          </div>
+          <div>
+            <p class="token-label">Ticker</p>
+            <p class="token-ticker">SQR</p>
           </div>
           <div class="token-address-block">
             <p class="token-label">Address</p>
-            <p class="token-address">Bpdt7Hey78HeEEr9Q6x19gYAns5n6w44LdjJhxN3pump</p>
+            <div class="token-address-row">
+              <p id="tokenAddress" class="token-address">Bpdt7Hey78HeEEr9Q6x19gYAns5n6w44LdjJhxN3pump</p>
+              <button id="copyTokenAddressButton" class="token-copy-button" type="button">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="airdrop-progress">
+          <div>
+            <p class="token-label">Current tier</p>
+            <h3 id="currentTierName">Not registered</h3>
+            <p id="currentTierSummary" class="airdrop-copy">Sign in to start earning airdrop progress.</p>
+          </div>
+          <div class="progress-stats">
+            <div>
+              <span id="scanProgressValue">0 / 5</span>
+              <p>QR scans</p>
+            </div>
+            <div>
+              <span id="referralProgressValue">0</span>
+              <p>Referrals</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="wallet-panel">
+          <div>
+            <p class="token-label">Airdrop wallet</p>
+            <p id="walletStatus" class="wallet-address">Sign in, then connect your Solana wallet.</p>
+            <p class="airdrop-copy">This wallet address will be saved with the same account email used for registration.</p>
+          </div>
+          <div class="wallet-actions">
+            <button id="connectWalletButton" class="primary-button" type="button">Connect wallet</button>
+            <button id="demoWalletButton" class="sample-button" type="button">Use demo wallet</button>
+          </div>
+        </div>
+
+        <div class="referral-panel">
+          <div>
+            <p class="token-label">Referral link</p>
+            <p id="referralLink" class="referral-link">Sign in to generate your link.</p>
+            <p id="incomingReferral" class="airdrop-copy hidden"></p>
+            <p id="referralAttribution" class="airdrop-copy hidden"></p>
+          </div>
+          <div class="referral-actions">
+            <button id="copyReferralButton" class="secondary-button" type="button">Copy referral</button>
+            <button id="shareReferralButton" class="primary-button" type="button">Share</button>
+            <button id="demoReferralButton" class="sample-button" type="button">Add demo referral</button>
           </div>
         </div>
 
         <div class="airdrop-grid">
-          <article class="airdrop-card tier-card">
+          <article id="tierOneCard" class="airdrop-card tier-card">
             <div class="tier-rank">Tier 1</div>
             <h3>Scanner</h3>
-            <p>Sign in with Google and confirm your email.</p>
+            <p>Create an account and scan 5 QR codes.</p>
             <div class="tier-reward">Base allocation</div>
           </article>
 
-          <article class="airdrop-card tier-card">
+          <article id="tierTwoCard" class="airdrop-card tier-card">
             <div class="tier-rank">Tier 2</div>
-            <h3>Verifier</h3>
-            <p>Analyze three QR examples and save your safety profile.</p>
+            <h3>Referrer</h3>
+            <p>Invite 1 person with your referral link.</p>
             <div class="tier-reward">2x allocation</div>
           </article>
 
-          <article class="airdrop-card tier-card">
+          <article id="tierThreeCard" class="airdrop-card tier-card">
             <div class="tier-rank">Tier 3</div>
             <h3>Guardian</h3>
-            <p>Share the project website and submit a suspicious QR report.</p>
+            <p>Invite multiple people and scan 50 QR codes.</p>
             <div class="tier-reward">5x allocation</div>
           </article>
         </div>
@@ -164,7 +216,7 @@
         <div class="panel-header">
           <div>
             <p class="eyebrow">Interactive demo</p>
-            <h2>Analyze a QR destination</h2>
+            <h2>Analyze any QR payload</h2>
           </div>
           <label class="toggle-card">
             <span>Auto-continue safe actions</span>
@@ -181,10 +233,10 @@
               <input id="qrImageInput" type="file" accept="image/*" capture="environment" hidden>
             </div>
 
-            <label for="urlInput">Paste a URL decoded from a QR code</label>
-            <input id="urlInput" type="text" placeholder="https://example.com/login">
+            <label for="urlInput">Paste decoded QR text</label>
+            <input id="urlInput" type="text" placeholder="https://example.com/login or WIFI:T:WPA;S:Network;P:password;;">
 
-            <div id="scanStatus" class="scan-status">Waiting for a scan or pasted QR destination.</div>
+            <div id="scanStatus" class="scan-status">Waiting for a scan or pasted QR payload.</div>
             <div id="uploadPreview" class="upload-preview hidden">
               <img id="previewImage" alt="Uploaded QR preview">
               <div>
@@ -194,21 +246,23 @@
             </div>
 
             <div class="button-row">
-              <button id="analyzeButton" class="primary-button" type="button">Analyze link</button>
+              <button id="analyzeButton" class="primary-button" type="button">Analyze payload</button>
               <button id="clearButton" class="secondary-button" type="button">Clear</button>
             </div>
 
             <div class="sample-block">
-              <p class="sample-title">Try sample QR destinations</p>
+              <p class="sample-title">Try sample QR payloads</p>
               <div class="sample-buttons">
                 <button class="sample-button" type="button" data-sample="safe">Safe brand link</button>
                 <button class="sample-button" type="button" data-sample="shortener">Shortened redirect chain</button>
                 <button class="sample-button" type="button" data-sample="lookalike">Lookalike phishing link</button>
                 <button class="sample-button" type="button" data-sample="encoded">Encoded suspicious URL</button>
                 <button class="sample-button" type="button" data-sample="malware">Malware delivery link</button>
-                <button class="sample-button" type="button" data-sample="fileshare">File-sharing malware chain</button>
-                <button class="sample-button" type="button" data-sample="tampered">Tampered parking QR</button>
-                <button class="sample-button" type="button" data-sample="vcard">Calendar/contact poison</button>
+                <button class="sample-button" type="button" data-sample="wifi">Wi-Fi join</button>
+                <button class="sample-button" type="button" data-sample="vcard">Contact card</button>
+                <button class="sample-button" type="button" data-sample="sms">SMS action</button>
+                <button class="sample-button" type="button" data-sample="crypto">Crypto payment</button>
+                <button class="sample-button" type="button" data-sample="json">Custom JSON</button>
               </div>
             </div>
           </div>
@@ -226,7 +280,7 @@
               </div>
               <div class="scan-line"></div>
             </div>
-            <p class="visual-copy">The hackathon demo should show the real iPhone journey: camera scan, decode, analyze, then safely continue from the same screen.</p>
+            <p class="visual-copy">The demo shows the real mobile journey: scan, decode the payload, classify the action, explain risk, then safely continue from the same screen.</p>
           </div>
         </div>
       </section>
@@ -242,14 +296,14 @@
 
         <div class="results-grid">
           <article class="result-card">
-            <h3>Destination</h3>
+            <h3>Decoded payload</h3>
             <p id="finalUrl" class="mono"></p>
             <p id="actionText" class="result-support"></p>
             <div id="threatTags" class="threat-tags"></div>
           </article>
 
           <article class="result-card">
-            <h3>Redirect chain</h3>
+            <h3>Payload action</h3>
             <ol id="redirectChain" class="chain-list"></ol>
           </article>
 
@@ -291,7 +345,7 @@
           </div>
           <div class="button-row">
             <button id="continueButton" class="primary-button" type="button">Continue safely</button>
-            <button id="copyButton" class="secondary-button" type="button">Copy URL</button>
+            <button id="copyButton" class="secondary-button" type="button">Copy payload</button>
           </div>
         </div>
       </section>
