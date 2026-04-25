@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PhishProof QR Demo</title>
   <link rel="stylesheet" href="./styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <div class="page-shell">
@@ -19,10 +20,11 @@
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#scanner">Try the demo</a>
+          <a class="secondary-button" href="#airdrop">Airdrop</a>
           <a class="secondary-button" href="#story">Why it matters</a>
         </div>
       </div>
-      <div class="hero-card">
+        <div class="hero-card">
         <div class="hero-card-label">Demo focus</div>
         <ul>
           <li>Built around iPhone scanning behavior</li>
@@ -51,6 +53,61 @@
           <h2>What is the hackathon hook?</h2>
           <p>It combines a strong cybersecurity story, a visual reveal, and a simple demo flow judges can understand in seconds.</p>
         </article>
+      </section>
+
+      <section class="airdrop-panel" id="airdrop">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Community airdrop</p>
+            <h2>Register for PhishProof QR tiers</h2>
+          </div>
+          <div id="airdropStatus" class="airdrop-status">Not signed in</div>
+        </div>
+
+        <div class="airdrop-grid">
+          <article class="airdrop-card featured-airdrop-card">
+            <p class="visual-label">Sign in</p>
+            <h3>Join with Google</h3>
+            <p class="airdrop-copy">
+              Use your existing Google session to register your email for the airdrop list.
+            </p>
+
+            <div id="googleSignInButton" class="google-signin-slot"></div>
+            <button id="demoGoogleButton" class="google-button" type="button">
+              <span class="google-icon">G</span>
+              Continue with Google
+            </button>
+
+            <div id="airdropProfile" class="airdrop-profile hidden">
+              <p class="preview-title">Registered profile</p>
+              <p id="profileName" class="profile-line"></p>
+              <p id="profileEmail" class="profile-line"></p>
+              <p id="profileTier" class="profile-tier"></p>
+              <button id="signOutButton" class="secondary-button" type="button">Sign out</button>
+            </div>
+          </article>
+
+          <article class="airdrop-card tier-card">
+            <div class="tier-rank">Tier 1</div>
+            <h3>Scanner</h3>
+            <p>Register with Google and confirm your email.</p>
+            <div class="tier-reward">Base allocation</div>
+          </article>
+
+          <article class="airdrop-card tier-card">
+            <div class="tier-rank">Tier 2</div>
+            <h3>Verifier</h3>
+            <p>Analyze three QR examples and save your safety profile.</p>
+            <div class="tier-reward">2x allocation</div>
+          </article>
+
+          <article class="airdrop-card tier-card">
+            <div class="tier-rank">Tier 3</div>
+            <h3>Guardian</h3>
+            <p>Share the project website and submit a suspicious QR report.</p>
+            <div class="tier-reward">5x allocation</div>
+          </article>
+        </div>
       </section>
 
       <section class="scanner-panel" id="scanner">

@@ -9,6 +9,11 @@ const sampleUrls = {
   vcard: "https://contact-sync-card.info/open?vcard=1&redirect=https://download-secure-update.top/app.apk"
 };
 
+const GOOGLE_CLIENT_ID = "PASTE_YOUR_GOOGLE_CLIENT_ID_HERE";
+const AIRDROP_REGISTER_ENDPOINT = "";
+const AIRDROP_STORAGE_KEY = "phishproofAirdropProfile";
+let googleInitAttempts = 0;
+
 const dom = {
   urlInput: document.getElementById("urlInput"),
   analyzeButton: document.getElementById("analyzeButton"),
@@ -35,10 +40,19 @@ const dom = {
   recommendedAction: document.getElementById("recommendedAction"),
   continueButton: document.getElementById("continueButton"),
   copyButton: document.getElementById("copyButton"),
-  autoContinueToggle: document.getElementById("autoContinueToggle")
+  autoContinueToggle: document.getElementById("autoContinueToggle"),
+  googleSignInButton: document.getElementById("googleSignInButton"),
+  demoGoogleButton: document.getElementById("demoGoogleButton"),
+  airdropStatus: document.getElementById("airdropStatus"),
+  airdropProfile: document.getElementById("airdropProfile"),
+  profileName: document.getElementById("profileName"),
+  profileEmail: document.getElementById("profileEmail"),
+  profileTier: document.getElementById("profileTier"),
+  signOutButton: document.getElementById("signOutButton")
 };
 
 let lastAnalysis = null;
+let scanCount = Number(window.localStorage.getItem("phishproofScanCount") || "0");
 
 function normalizeUrl(raw) {
   const trimmed = raw.trim();
@@ -252,6 +266,9 @@ function renderTags(tags) {
 
 function renderAnalysis(result) {
   lastAnalysis = result;
+  scanCount += 1;
+  window.localStorage.setItem("phishproofScanCount", String(scanCount));
+  updateAirdropTier();
   dom.resultsSection.classList.remove("hidden");
   dom.resultTitle.textContent = result.verdict === "Safe" ? "Low-risk result" : `${result.verdict} result`;
   dom.verdictBadge.textContent = result.verdict;
@@ -283,6 +300,139 @@ function renderAnalysis(result) {
   if (result.canAutoContinue && dom.autoContinueToggle.checked) {
     dom.recommendedAction.textContent = "Safe mode is enabled, so the app would continue automatically without a second scan.";
   }
+}
+
+function getAirdropTier() {
+  if (scanCount >= 3) {
+    return {
+      name: "Tier 2: Verifier",
+      description: "2x allocation unlocked after analyzing three QR examples."
+    };
+  }
+  return {
+    name: "Tier 1: Scanner",
+    description: "Base allocation unlocked after Google registration."
+  };
+}
+
+function decodeJwtPayload(token) {
+  // Frontend decoding is only for display/demo registration. Verify this token on your server before writing to the real database.
+  const [, payload] = token.split(".");
+  if (!payload) throw new Error("Google sign-in did not return a valid credential.");
+  const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+  return JSON.parse(window.atob(normalized));
+}
+
+function getStoredAirdropProfile() {
+  try {
+    return JSON.parse(window.localStorage.getItem(AIRDROP_STORAGE_KEY));
+  } catch {
+    return null;
+  }
+}
+
+async function saveAirdropProfile(profile) {
+  window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(profile));
+
+  if (!AIRDROP_REGISTER_ENDPOINT) return;
+
+  await fetch(AIRDROP_REGISTER_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(profile)
+  });
+}
+
+function renderAirdropProfile(profile) {
+  if (!profile) {
+    dom.airdropStatus.textContent = "Not signed in";
+    dom.airdropStatus.classList.remove("signed-in");
+    dom.airdropProfile.classList.add("hidden");
+    return;
+  }
+
+  const tier = getAirdropTier();
+  dom.airdropStatus.textContent = "Registered";
+  dom.airdropStatus.classList.add("signed-in");
+  dom.airdropProfile.classList.remove("hidden");
+  dom.profileName.textContent = `Name: ${profile.name}`;
+  dom.profileEmail.textContent = `Email: ${profile.email}`;
+  dom.profileTier.textContent = tier.name;
+}
+
+function updateAirdropTier() {
+  const profile = getStoredAirdropProfile();
+  if (!profile) return;
+  const tier = getAirdropTier();
+  const updatedProfile = { ...profile, tier: tier.name, tierDescription: tier.description };
+  window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(updatedProfile));
+  renderAirdropProfile(updatedProfile);
+}
+
+async function registerAirdropUser(googleProfile) {
+  if (!googleProfile.email) {
+    window.alert("Google sign-in did not return an email address.");
+    return;
+  }
+
+  const tier = getAirdropTier();
+  const profile = {
+    email: googleProfile.email,
+    name: googleProfile.name || googleProfile.email,
+    googleSubject: googleProfile.sub || "demo-google-user",
+    tier: tier.name,
+    tierDescription: tier.description,
+    registeredAt: new Date().toISOString()
+  };
+
+  try {
+    await saveAirdropProfile(profile);
+    renderAirdropProfile(profile);
+  } catch {
+    window.alert("Registration could not reach the database endpoint. The profile was saved locally for this demo.");
+    renderAirdropProfile(profile);
+  }
+}
+
+function handleGoogleCredential(response) {
+  try {
+    const googleProfile = decodeJwtPayload(response.credential);
+    registerAirdropUser(googleProfile);
+  } catch (error) {
+    window.alert(error.message);
+  }
+}
+
+function initGoogleSignIn() {
+  const hasRealClientId = GOOGLE_CLIENT_ID && !GOOGLE_CLIENT_ID.includes("PASTE_YOUR");
+
+  if (!hasRealClientId) {
+    dom.demoGoogleButton.classList.add("is-visible");
+    return;
+  }
+
+  if (!window.google?.accounts?.id) {
+    googleInitAttempts += 1;
+    if (googleInitAttempts < 8) {
+      window.setTimeout(initGoogleSignIn, 300);
+      return;
+    }
+    dom.demoGoogleButton.classList.add("is-visible");
+    return;
+  }
+
+  window.google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleCredential
+  });
+
+  window.google.accounts.id.renderButton(dom.googleSignInButton, {
+    theme: "filled_blue",
+    size: "large",
+    shape: "pill",
+    text: "continue_with",
+    width: 280
+  });
 }
 
 function runAnalysis() {
@@ -356,3 +506,19 @@ dom.continueButton.addEventListener("click", () => {
   }
   window.alert(`Demo action: continue to ${lastAnalysis.urlString}`);
 });
+
+dom.demoGoogleButton.addEventListener("click", () => {
+  registerAirdropUser({
+    email: "demo.user@gmail.com",
+    name: "Demo Google User",
+    sub: "demo-google-user"
+  });
+});
+
+dom.signOutButton.addEventListener("click", () => {
+  window.localStorage.removeItem(AIRDROP_STORAGE_KEY);
+  renderAirdropProfile(null);
+});
+
+renderAirdropProfile(getStoredAirdropProfile());
+window.addEventListener("load", initGoogleSignIn);
