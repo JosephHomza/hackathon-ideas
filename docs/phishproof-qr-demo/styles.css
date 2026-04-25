@@ -39,6 +39,14 @@ body {
   padding: 28px 0 44px;
 }
 
+.top-auth {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 52px;
+  margin-bottom: 14px;
+}
+
 .hero,
 .airdrop-panel,
 .scanner-panel,
@@ -259,15 +267,53 @@ input[type="text"] {
 
 .airdrop-grid {
   display: grid;
-  grid-template-columns: 1.3fr repeat(3, minmax(0, 0.9fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-top: 22px;
 }
 
-.featured-airdrop-card {
+.token-strip {
+  display: grid;
+  grid-template-columns: 0.45fr 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-top: 22px;
+  padding: 18px 20px;
+  border: 1px solid rgba(103, 242, 200, 0.2);
+  border-radius: 18px;
   background:
-    radial-gradient(circle at top right, rgba(103, 242, 200, 0.12), transparent 38%),
-    var(--panel-strong);
+    radial-gradient(circle at top right, rgba(103, 242, 200, 0.1), transparent 35%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.token-strip h3,
+.token-label,
+.token-address {
+  margin: 0;
+}
+
+.token-strip h3 {
+  font-size: 1.55rem;
+}
+
+.token-label {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin-bottom: 6px;
+}
+
+.token-address {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.16);
+  color: var(--text);
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
 }
 
 .airdrop-card h3 {
@@ -300,28 +346,35 @@ input[type="text"] {
 }
 
 .google-signin-slot {
-  margin-top: 16px;
+  min-height: 40px;
 }
 
 .google-button {
   display: none;
-  width: 100%;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-  padding: 13px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #edf4ff;
-  color: #09111f;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 18px 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: #ffffff;
+  color: #1f2937;
   font: inherit;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .google-button.is-visible {
   display: inline-flex;
+}
+
+.google-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(103, 242, 200, 0.45);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
 }
 
 .google-icon {
@@ -329,29 +382,149 @@ input[type="text"] {
   place-items: center;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-  background: #09111f;
-  color: var(--accent);
-  font-weight: 900;
 }
 
-.airdrop-profile {
-  margin-top: 18px;
-  padding: 16px;
+.google-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.top-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(100%, 620px);
+  padding: 10px 12px 10px 16px;
   border-radius: 16px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(10, 18, 33, 0.9);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
 }
 
-.profile-line {
-  margin: 6px 0;
+.profile-name,
+.profile-email {
+  margin: 0;
+  line-height: 1.25;
+}
+
+.profile-name {
+  font-weight: 800;
+}
+
+.profile-email {
   color: var(--muted);
+  font-size: 0.86rem;
   word-break: break-word;
 }
 
 .profile-tier {
   display: inline-block;
-  margin: 10px 0 0;
+}
+
+.sign-out-button {
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.account-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: start end;
+  padding: 82px max(20px, calc((100vw - 1180px) / 2)) 20px 20px;
+  background: rgba(4, 10, 19, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.account-card {
+  width: min(100%, 390px);
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+}
+
+.account-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 4px 4px 14px;
+}
+
+.account-header h2,
+.account-header p {
+  margin: 0;
+}
+
+.account-header h2 {
+  font-size: 1.22rem;
+}
+
+.account-header p {
+  color: #5f6368;
+  margin-top: 3px;
+}
+
+.account-option {
+  display: flex;
+  width: 100%;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 10px;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-option:hover {
+  background: #f8fafc;
+}
+
+.account-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #041019;
+  font-weight: 900;
+}
+
+.account-option strong,
+.account-option small {
+  display: block;
+}
+
+.account-option small {
+  margin-top: 2px;
+  color: #5f6368;
+}
+
+.modal-close-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #1f2937;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .tier-card {
@@ -579,7 +752,9 @@ input[type="text"] {
 
 @media (max-width: 900px) {
   .hero,
+  .top-profile,
   .story-grid,
+  .token-strip,
   .airdrop-grid,
   .scanner-grid,
   .results-grid,
@@ -594,6 +769,20 @@ input[type="text"] {
 
   .page-shell {
     width: min(100% - 20px, 1180px);
+  }
+
+  .top-auth {
+    justify-content: stretch;
+  }
+
+  .google-button,
+  .top-profile {
+    width: 100%;
+  }
+
+  .account-modal {
+    place-items: end stretch;
+    padding: 20px;
   }
 
   .upload-preview,

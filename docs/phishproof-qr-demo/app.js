@@ -48,7 +48,10 @@ const dom = {
   profileName: document.getElementById("profileName"),
   profileEmail: document.getElementById("profileEmail"),
   profileTier: document.getElementById("profileTier"),
-  signOutButton: document.getElementById("signOutButton")
+  signOutButton: document.getElementById("signOutButton"),
+  demoAccountModal: document.getElementById("demoAccountModal"),
+  closeAccountModal: document.getElementById("closeAccountModal"),
+  accountOptions: Array.from(document.querySelectorAll(".account-option"))
 };
 
 let lastAnalysis = null;
@@ -348,6 +351,7 @@ function renderAirdropProfile(profile) {
     dom.airdropStatus.textContent = "Not signed in";
     dom.airdropStatus.classList.remove("signed-in");
     dom.airdropProfile.classList.add("hidden");
+    dom.googleSignInButton.classList.remove("hidden");
     return;
   }
 
@@ -355,6 +359,8 @@ function renderAirdropProfile(profile) {
   dom.airdropStatus.textContent = "Registered";
   dom.airdropStatus.classList.add("signed-in");
   dom.airdropProfile.classList.remove("hidden");
+  dom.googleSignInButton.classList.add("hidden");
+  dom.demoGoogleButton.classList.remove("is-visible");
   dom.profileName.textContent = `Name: ${profile.name}`;
   dom.profileEmail.textContent = `Email: ${profile.email}`;
   dom.profileTier.textContent = tier.name;
@@ -403,7 +409,19 @@ function handleGoogleCredential(response) {
   }
 }
 
+function openDemoAccountChooser() {
+  dom.demoAccountModal.classList.remove("hidden");
+  dom.demoAccountModal.setAttribute("aria-hidden", "false");
+}
+
+function closeDemoAccountChooser() {
+  dom.demoAccountModal.classList.add("hidden");
+  dom.demoAccountModal.setAttribute("aria-hidden", "true");
+}
+
 function initGoogleSignIn() {
+  if (getStoredAirdropProfile()) return;
+
   const hasRealClientId = GOOGLE_CLIENT_ID && !GOOGLE_CLIENT_ID.includes("PASTE_YOUR");
 
   if (!hasRealClientId) {
@@ -423,15 +441,24 @@ function initGoogleSignIn() {
 
   window.google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleCredential
+    callback: handleGoogleCredential,
+    cancel_on_tap_outside: true,
+    use_fedcm_for_prompt: true
   });
 
   window.google.accounts.id.renderButton(dom.googleSignInButton, {
-    theme: "filled_blue",
+    theme: "outline",
     size: "large",
-    shape: "pill",
-    text: "continue_with",
-    width: 280
+    shape: "rectangular",
+    text: "signin_with",
+    logo_alignment: "left",
+    width: 240
+  });
+
+  window.google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed?.() || notification.isSkippedMoment?.()) {
+      dom.googleSignInButton.classList.remove("hidden");
+    }
   });
 }
 
@@ -508,16 +535,30 @@ dom.continueButton.addEventListener("click", () => {
 });
 
 dom.demoGoogleButton.addEventListener("click", () => {
-  registerAirdropUser({
-    email: "demo.user@gmail.com",
-    name: "Demo Google User",
-    sub: "demo-google-user"
+  openDemoAccountChooser();
+});
+
+dom.accountOptions.forEach((button) => {
+  button.addEventListener("click", () => {
+    closeDemoAccountChooser();
+    registerAirdropUser({
+      email: button.dataset.demoEmail,
+      name: button.dataset.demoName,
+      sub: `demo-${button.dataset.demoEmail}`
+    });
   });
+});
+
+dom.closeAccountModal.addEventListener("click", closeDemoAccountChooser);
+
+dom.demoAccountModal.addEventListener("click", (event) => {
+  if (event.target === dom.demoAccountModal) closeDemoAccountChooser();
 });
 
 dom.signOutButton.addEventListener("click", () => {
   window.localStorage.removeItem(AIRDROP_STORAGE_KEY);
   renderAirdropProfile(null);
+  initGoogleSignIn();
 });
 
 renderAirdropProfile(getStoredAirdropProfile());

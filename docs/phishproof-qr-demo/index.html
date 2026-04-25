@@ -9,6 +9,67 @@
 </head>
 <body>
   <div class="page-shell">
+    <div class="top-auth">
+      <div id="googleSignInButton" class="google-signin-slot"></div>
+      <button id="demoGoogleButton" class="google-button" type="button">
+        <span class="google-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path fill="#4285f4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.2h5.9c-.3 1.4-1 2.5-2.1 3.2v2.7h3.4c2-1.8 3.4-4.5 3.4-7.9Z"/>
+            <path fill="#34a853" d="M12 23c2.9 0 5.3-1 7.1-2.6l-3.4-2.7c-1 .6-2.2 1-3.7 1-2.8 0-5.1-1.9-6-4.4H2.5v2.8C4.3 20.6 7.9 23 12 23Z"/>
+            <path fill="#fbbc05" d="M6 14.3c-.2-.6-.3-1.3-.3-2.1s.1-1.4.3-2.1V7.3H2.5C1.8 8.8 1.4 10.4 1.4 12.2s.4 3.4 1.1 4.9L6 14.3Z"/>
+            <path fill="#ea4335" d="M12 5.7c1.6 0 3 .5 4.1 1.6l3-3C17.3 2.6 14.9 1.6 12 1.6 7.9 1.6 4.3 4 2.5 7.3L6 10.1c.9-2.5 3.2-4.4 6-4.4Z"/>
+          </svg>
+        </span>
+        <span>Sign in with Google</span>
+      </button>
+
+      <div id="airdropProfile" class="top-profile hidden">
+        <div>
+          <p id="profileName" class="profile-name"></p>
+          <p id="profileEmail" class="profile-email"></p>
+        </div>
+        <p id="profileTier" class="profile-tier"></p>
+        <button id="signOutButton" class="sign-out-button" type="button">Sign out</button>
+      </div>
+    </div>
+
+    <div id="demoAccountModal" class="account-modal hidden" aria-hidden="true">
+      <div class="account-card" role="dialog" aria-modal="true" aria-labelledby="accountChooserTitle">
+        <div class="account-header">
+          <span class="google-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path fill="#4285f4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.2h5.9c-.3 1.4-1 2.5-2.1 3.2v2.7h3.4c2-1.8 3.4-4.5 3.4-7.9Z"/>
+              <path fill="#34a853" d="M12 23c2.9 0 5.3-1 7.1-2.6l-3.4-2.7c-1 .6-2.2 1-3.7 1-2.8 0-5.1-1.9-6-4.4H2.5v2.8C4.3 20.6 7.9 23 12 23Z"/>
+              <path fill="#fbbc05" d="M6 14.3c-.2-.6-.3-1.3-.3-2.1s.1-1.4.3-2.1V7.3H2.5C1.8 8.8 1.4 10.4 1.4 12.2s.4 3.4 1.1 4.9L6 14.3Z"/>
+              <path fill="#ea4335" d="M12 5.7c1.6 0 3 .5 4.1 1.6l3-3C17.3 2.6 14.9 1.6 12 1.6 7.9 1.6 4.3 4 2.5 7.3L6 10.1c.9-2.5 3.2-4.4 6-4.4Z"/>
+            </svg>
+          </span>
+          <div>
+            <h2 id="accountChooserTitle">Choose an account</h2>
+            <p>Continue to PhishProof QR</p>
+          </div>
+        </div>
+
+        <button class="account-option" type="button" data-demo-email="demo.user@gmail.com" data-demo-name="Demo Google User">
+          <span class="account-avatar">D</span>
+          <span>
+            <strong>Demo Google User</strong>
+            <small>demo.user@gmail.com</small>
+          </span>
+        </button>
+
+        <button class="account-option" type="button" data-demo-email="phishproof.holder@gmail.com" data-demo-name="PhishProof Holder">
+          <span class="account-avatar">P</span>
+          <span>
+            <strong>PhishProof Holder</strong>
+            <small>phishproof.holder@gmail.com</small>
+          </span>
+        </button>
+
+        <button id="closeAccountModal" class="modal-close-button" type="button">Cancel</button>
+      </div>
+    </div>
+
     <header class="hero">
       <div class="hero-copy">
         <p class="eyebrow">Cybersecurity Hackathon Demo</p>
@@ -64,33 +125,22 @@
           <div id="airdropStatus" class="airdrop-status">Not signed in</div>
         </div>
 
+        <div class="token-strip">
+          <div>
+            <p class="token-label">Token</p>
+            <h3>Safescan</h3>
+          </div>
+          <div class="token-address-block">
+            <p class="token-label">Address</p>
+            <p class="token-address">Bpdt7Hey78HeEEr9Q6x19gYAns5n6w44LdjJhxN3pump</p>
+          </div>
+        </div>
+
         <div class="airdrop-grid">
-          <article class="airdrop-card featured-airdrop-card">
-            <p class="visual-label">Sign in</p>
-            <h3>Join with Google</h3>
-            <p class="airdrop-copy">
-              Use your existing Google session to register your email for the airdrop list.
-            </p>
-
-            <div id="googleSignInButton" class="google-signin-slot"></div>
-            <button id="demoGoogleButton" class="google-button" type="button">
-              <span class="google-icon">G</span>
-              Continue with Google
-            </button>
-
-            <div id="airdropProfile" class="airdrop-profile hidden">
-              <p class="preview-title">Registered profile</p>
-              <p id="profileName" class="profile-line"></p>
-              <p id="profileEmail" class="profile-line"></p>
-              <p id="profileTier" class="profile-tier"></p>
-              <button id="signOutButton" class="secondary-button" type="button">Sign out</button>
-            </div>
-          </article>
-
           <article class="airdrop-card tier-card">
             <div class="tier-rank">Tier 1</div>
             <h3>Scanner</h3>
-            <p>Register with Google and confirm your email.</p>
+            <p>Sign in with Google and confirm your email.</p>
             <div class="tier-reward">Base allocation</div>
           </article>
 
