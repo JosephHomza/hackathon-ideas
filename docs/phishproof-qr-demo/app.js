@@ -695,7 +695,7 @@ function updateAirdropProgress() {
     const referralCode = profile.referralCode || getReferralCode(profile);
     const updatedProfile = { ...profile, referralCode, tier: tier.name, tierDescription: tier.description };
     window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(updatedProfile));
-    dom.referralLink.textContent = buildReferralLink(updatedProfile);
+    dom.referralLink.textContent = "Your referral link is ready. Copy it with one click.";
 
     if (updatedProfile.referredBy) {
       dom.referralAttribution.classList.remove("hidden");
@@ -704,7 +704,7 @@ function updateAirdropProgress() {
       dom.referralAttribution.classList.add("hidden");
     }
   } else {
-    dom.referralLink.textContent = "Sign in to generate your link.";
+    dom.referralLink.textContent = "Sign in to unlock your referral link.";
     dom.referralAttribution.classList.add("hidden");
   }
 
@@ -959,8 +959,8 @@ dom.copyReferralButton.addEventListener("click", async () => {
 
   try {
     await navigator.clipboard.writeText(buildReferralLink(profile));
-    dom.copyReferralButton.textContent = "Copied";
-    setTimeout(() => { dom.copyReferralButton.textContent = "Copy referral"; }, 1200);
+    dom.copyReferralButton.textContent = "Copied link";
+    setTimeout(() => { dom.copyReferralButton.textContent = "Copy referral link"; }, 1200);
   } catch {
     window.alert("Clipboard copy failed in this browser.");
   }

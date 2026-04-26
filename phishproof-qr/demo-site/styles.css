@@ -337,14 +337,13 @@ input[type="text"] {
 
 .referral-link {
   margin: 0;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.16);
-  color: var(--text);
-  font-family: "IBM Plex Mono", "Consolas", monospace;
-  font-size: 0.88rem;
-  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.referral-copy-button {
+  min-width: 178px;
 }
 
 .wallet-address {
