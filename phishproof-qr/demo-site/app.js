@@ -599,7 +599,7 @@ function renderAirdropProfile(profile) {
   dom.airdropProfile.classList.remove("hidden");
   dom.googleSignInButton.classList.add("hidden");
   dom.demoGoogleButton.classList.remove("is-visible");
-  dom.profileName.textContent = `Name: ${profile.name}`;
+  dom.profileName.textContent = "Safe scanner";
   dom.profileEmail.textContent = `Email: ${profile.email}`;
   dom.profileTier.textContent = tier.name;
   renderWalletState(profile);
