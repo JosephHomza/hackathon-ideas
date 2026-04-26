@@ -52,6 +52,8 @@ const dom = {
   copyTokenAddressButton: document.getElementById("copyTokenAddressButton"),
   googleSignInButton: document.getElementById("googleSignInButton"),
   demoGoogleButton: document.getElementById("demoGoogleButton"),
+  topCopyReferralButton: document.getElementById("topCopyReferralButton"),
+  topConnectWalletButton: document.getElementById("topConnectWalletButton"),
   airdropStatus: document.getElementById("airdropStatus"),
   airdropProfile: document.getElementById("airdropProfile"),
   profileName: document.getElementById("profileName"),
@@ -612,7 +614,9 @@ function renderWalletState(profile = getStoredAirdropProfile()) {
   if (!profile) {
     dom.walletStatus.textContent = "Sign in to unlock wallet connection.";
     dom.connectWalletButton.textContent = "Connect wallet";
+    dom.topConnectWalletButton.textContent = "Connect wallet";
     dom.connectWalletButton.disabled = false;
+    dom.topConnectWalletButton.disabled = false;
     dom.demoWalletButton.disabled = false;
     return;
   }
@@ -620,14 +624,18 @@ function renderWalletState(profile = getStoredAirdropProfile()) {
   if (profile.walletAddress) {
     dom.walletStatus.textContent = "Wallet saved to your airdrop account.";
     dom.connectWalletButton.textContent = "Wallet connected";
+    dom.topConnectWalletButton.textContent = "Wallet connected";
     dom.connectWalletButton.disabled = true;
+    dom.topConnectWalletButton.disabled = true;
     dom.demoWalletButton.disabled = true;
     return;
   }
 
   dom.walletStatus.textContent = "No wallet connected yet.";
   dom.connectWalletButton.textContent = "Connect wallet";
+  dom.topConnectWalletButton.textContent = "Connect wallet";
   dom.connectWalletButton.disabled = false;
+  dom.topConnectWalletButton.disabled = false;
   dom.demoWalletButton.disabled = false;
 }
 
@@ -699,6 +707,7 @@ function updateAirdropProgress() {
     const updatedProfile = { ...profile, referralCode, tier: tier.name, tierDescription: tier.description };
     window.localStorage.setItem(AIRDROP_STORAGE_KEY, JSON.stringify(updatedProfile));
     dom.referralLink.textContent = "Your referral link is ready. Copy it with one click.";
+    dom.topCopyReferralButton.textContent = "Referral link";
 
     if (updatedProfile.referredBy) {
       dom.referralAttribution.classList.remove("hidden");
@@ -708,12 +717,52 @@ function updateAirdropProgress() {
     }
   } else {
     dom.referralLink.textContent = "Sign in to unlock your referral link.";
+    dom.topCopyReferralButton.textContent = "Referral link";
     dom.referralAttribution.classList.add("hidden");
   }
 
   if (incomingReferral) {
     dom.incomingReferral.classList.remove("hidden");
     dom.incomingReferral.textContent = `Referral detected: ${incomingReferral}. If this user signs in, that referrer code is saved with their account.`;
+  }
+}
+
+async function connectWallet() {
+  const profile = getStoredAirdropProfile();
+  if (!profile) {
+    window.alert("Sign in with Google before connecting a wallet.");
+    return;
+  }
+
+  const detectedWallet = getSolanaWalletProvider();
+  if (!detectedWallet) {
+    window.alert("No Phantom, Solflare, or Brave Solana wallet was detected. Install a wallet or use the demo wallet for local testing.");
+    return;
+  }
+
+  try {
+    const response = await detectedWallet.provider.connect();
+    const publicKey = response?.publicKey || detectedWallet.provider.publicKey;
+    await attachWalletToProfile(publicKey.toString(), detectedWallet.name);
+  } catch {
+    window.alert("Wallet connection was cancelled or failed.");
+  }
+}
+
+async function copyReferralLink(button = dom.copyReferralButton) {
+  const profile = getStoredAirdropProfile();
+  if (!profile) {
+    window.alert("Sign in first to generate your referral link.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(buildReferralLink(profile));
+    const defaultText = button === dom.topCopyReferralButton ? "Referral link" : "Copy referral link";
+    button.textContent = "Copied link";
+    setTimeout(() => { button.textContent = defaultText; }, 1200);
+  } catch {
+    window.alert("Clipboard copy failed in this browser.");
   }
 }
 
@@ -943,47 +992,15 @@ dom.signOutButton.addEventListener("click", () => {
   initGoogleSignIn();
 });
 
-dom.connectWalletButton.addEventListener("click", async () => {
-  const profile = getStoredAirdropProfile();
-  if (!profile) {
-    window.alert("Sign in with Google before connecting a wallet.");
-    return;
-  }
-
-  const detectedWallet = getSolanaWalletProvider();
-  if (!detectedWallet) {
-    window.alert("No Phantom, Solflare, or Brave Solana wallet was detected. Install a wallet or use the demo wallet for local testing.");
-    return;
-  }
-
-  try {
-    const response = await detectedWallet.provider.connect();
-    const publicKey = response?.publicKey || detectedWallet.provider.publicKey;
-    await attachWalletToProfile(publicKey.toString(), detectedWallet.name);
-  } catch {
-    window.alert("Wallet connection was cancelled or failed.");
-  }
-});
+dom.topConnectWalletButton.addEventListener("click", connectWallet);
+dom.connectWalletButton.addEventListener("click", connectWallet);
 
 dom.demoWalletButton.addEventListener("click", () => {
   attachWalletToProfile("DemoSQRWallet11111111111111111111111111111", "demo");
 });
 
-dom.copyReferralButton.addEventListener("click", async () => {
-  const profile = getStoredAirdropProfile();
-  if (!profile) {
-    window.alert("Sign in first to generate your referral link.");
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(buildReferralLink(profile));
-    dom.copyReferralButton.textContent = "Copied link";
-    setTimeout(() => { dom.copyReferralButton.textContent = "Copy referral link"; }, 1200);
-  } catch {
-    window.alert("Clipboard copy failed in this browser.");
-  }
-});
+dom.topCopyReferralButton.addEventListener("click", () => copyReferralLink(dom.topCopyReferralButton));
+dom.copyReferralButton.addEventListener("click", () => copyReferralLink(dom.copyReferralButton));
 
 dom.shareReferralButton.addEventListener("click", async () => {
   const profile = getStoredAirdropProfile();

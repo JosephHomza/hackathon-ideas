@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeScan QR Demo</title>
-  <link rel="stylesheet" href="./styles.css?v=f13365f">
+  <link rel="stylesheet" href="./styles.css?v=top-actions">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <div class="page-shell">
     <div class="top-auth">
+      <button id="topCopyReferralButton" class="top-action-button" type="button">Referral link</button>
+      <button id="topConnectWalletButton" class="top-action-button" type="button">Connect wallet</button>
       <div id="googleSignInButton" class="google-signin-slot"></div>
       <button id="demoGoogleButton" class="google-button" type="button">
         <span class="google-icon" aria-hidden="true">
@@ -370,6 +372,6 @@
     </main>
   </div>
 
-  <script src="./app.js?v=f13365f"></script>
+  <script src="./app.js?v=top-actions"></script>
 </body>
 </html>
