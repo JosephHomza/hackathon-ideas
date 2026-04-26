@@ -11,13 +11,15 @@ const sampleUrls = {
   json: "{\"type\":\"airdrop\",\"ref\":\"SAFE-DEMO\",\"action\":\"open\",\"url\":\"https://bit.ly/3secure-deal\"}"
 };
 
-const GOOGLE_CLIENT_ID = "PASTE_YOUR_GOOGLE_CLIENT_ID_HERE";
+const GOOGLE_CLIENT_ID = "";
+const BACKEND_BASE_URL = "https://safescan-qr.onrender.com";
 const AIRDROP_REGISTER_ENDPOINT = "";
 const PUBLIC_SITE_URL = "https://josephhomza.github.io/hackathon-ideas/phishproof-qr-demo/";
 const AIRDROP_STORAGE_KEY = "phishproofAirdropProfile";
 const REFERRAL_STORAGE_KEY = "safescanIncomingReferral";
 const REFERRAL_ATTRIBUTIONS_STORAGE_KEY = "safescanReferralAttributions";
 let googleInitAttempts = 0;
+let activeGoogleClientId = GOOGLE_CLIENT_ID;
 
 const dom = {
   urlInput: document.getElementById("urlInput"),
@@ -765,10 +767,26 @@ function closeDemoAccountChooser() {
   dom.demoAccountModal.setAttribute("aria-hidden", "true");
 }
 
-function initGoogleSignIn() {
+async function loadGoogleClientId() {
+  if (activeGoogleClientId && !activeGoogleClientId.includes("PASTE_YOUR")) return activeGoogleClientId;
+
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/api/config`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Google config unavailable.");
+    const config = await response.json();
+    activeGoogleClientId = config.google_client_id || "";
+  } catch {
+    activeGoogleClientId = "";
+  }
+
+  return activeGoogleClientId;
+}
+
+async function initGoogleSignIn() {
   if (getStoredAirdropProfile()) return;
 
-  const hasRealClientId = GOOGLE_CLIENT_ID && !GOOGLE_CLIENT_ID.includes("PASTE_YOUR");
+  const googleClientId = await loadGoogleClientId();
+  const hasRealClientId = googleClientId && !googleClientId.includes("PASTE_YOUR");
 
   if (!hasRealClientId) {
     dom.demoGoogleButton.classList.add("is-visible");
@@ -786,7 +804,7 @@ function initGoogleSignIn() {
   }
 
   window.google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
+    client_id: googleClientId,
     callback: handleGoogleCredential,
     cancel_on_tap_outside: true,
     use_fedcm_for_prompt: true
