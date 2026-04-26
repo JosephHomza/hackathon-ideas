@@ -756,13 +756,15 @@ async function copyReferralLink(button = dom.copyReferralButton) {
     return;
   }
 
+  const referralUrl = buildReferralLink(profile);
   try {
-    await navigator.clipboard.writeText(buildReferralLink(profile));
+    if (!navigator.clipboard?.writeText) throw new Error("Clipboard API unavailable.");
+    await navigator.clipboard.writeText(referralUrl);
     const defaultText = button === dom.topCopyReferralButton ? "Referral link" : "Copy referral link";
     button.textContent = "Copied link";
     setTimeout(() => { button.textContent = defaultText; }, 1200);
   } catch {
-    window.alert("Clipboard copy failed in this browser.");
+    window.prompt("Copy your referral link:", referralUrl);
   }
 }
 
