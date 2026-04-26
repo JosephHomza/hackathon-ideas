@@ -608,14 +608,15 @@ function renderAirdropProfile(profile) {
 
 function renderWalletState(profile = getStoredAirdropProfile()) {
   if (!profile) {
-    dom.walletStatus.textContent = "Sign in, then connect your Solana wallet.";
+    dom.walletStatus.textContent = "Sign in to unlock wallet connection.";
+    dom.connectWalletButton.textContent = "Connect wallet";
     dom.connectWalletButton.disabled = false;
     dom.demoWalletButton.disabled = false;
     return;
   }
 
   if (profile.walletAddress) {
-    dom.walletStatus.textContent = profile.walletAddress;
+    dom.walletStatus.textContent = "Wallet saved to your airdrop account.";
     dom.connectWalletButton.textContent = "Wallet connected";
     dom.connectWalletButton.disabled = true;
     dom.demoWalletButton.disabled = true;
