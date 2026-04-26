@@ -50,6 +50,7 @@ const dom = {
   autoContinueToggle: document.getElementById("autoContinueToggle"),
   tokenAddress: document.getElementById("tokenAddress"),
   copyTokenAddressButton: document.getElementById("copyTokenAddressButton"),
+  googleSignInWrap: document.getElementById("googleSignInWrap"),
   googleSignInButton: document.getElementById("googleSignInButton"),
   demoGoogleButton: document.getElementById("demoGoogleButton"),
   topCopyReferralButton: document.getElementById("topCopyReferralButton"),
@@ -592,6 +593,7 @@ function renderAirdropProfile(profile) {
     dom.airdropStatus.textContent = "Not signed in";
     dom.airdropStatus.classList.remove("signed-in");
     dom.airdropProfile.classList.add("hidden");
+    dom.googleSignInWrap.classList.add("hidden");
     dom.googleSignInButton.classList.remove("hidden");
     updateAirdropProgress();
     return;
@@ -601,6 +603,7 @@ function renderAirdropProfile(profile) {
   dom.airdropStatus.textContent = "Registered";
   dom.airdropStatus.classList.add("signed-in");
   dom.airdropProfile.classList.remove("hidden");
+  dom.googleSignInWrap.classList.add("hidden");
   dom.googleSignInButton.classList.add("hidden");
   dom.demoGoogleButton.classList.remove("is-visible");
   dom.profileName.textContent = "Safe scanner";
@@ -840,6 +843,7 @@ async function initGoogleSignIn() {
   const hasRealClientId = googleClientId && !googleClientId.includes("PASTE_YOUR");
 
   if (!hasRealClientId) {
+    dom.googleSignInWrap.classList.add("hidden");
     dom.demoGoogleButton.classList.add("is-visible");
     return;
   }
@@ -850,6 +854,7 @@ async function initGoogleSignIn() {
       window.setTimeout(initGoogleSignIn, 300);
       return;
     }
+    dom.googleSignInWrap.classList.add("hidden");
     dom.demoGoogleButton.classList.add("is-visible");
     return;
   }
@@ -870,8 +875,12 @@ async function initGoogleSignIn() {
     width: 240
   });
 
+  dom.googleSignInWrap.classList.remove("hidden");
+  dom.demoGoogleButton.classList.remove("is-visible");
+
   window.google.accounts.id.prompt((notification) => {
     if (notification.isNotDisplayed?.() || notification.isSkippedMoment?.()) {
+      dom.googleSignInWrap.classList.remove("hidden");
       dom.googleSignInButton.classList.remove("hidden");
     }
   });
