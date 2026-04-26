@@ -18,6 +18,7 @@ const PUBLIC_SITE_URL = "https://josephhomza.github.io/hackathon-ideas/phishproo
 const AIRDROP_STORAGE_KEY = "phishproofAirdropProfile";
 const REFERRAL_STORAGE_KEY = "safescanIncomingReferral";
 const REFERRAL_ATTRIBUTIONS_STORAGE_KEY = "safescanReferralAttributions";
+const SCANNED_PAYLOADS_STORAGE_KEY = "phishproofScannedPayloads";
 let googleInitAttempts = 0;
 let activeGoogleClientId = GOOGLE_CLIENT_ID;
 
@@ -84,6 +85,13 @@ const dom = {
 
 let lastAnalysis = null;
 let scanCount = Number(window.localStorage.getItem("phishproofScanCount") || "0");
+let scannedPayloads = new Set();
+
+try {
+  scannedPayloads = new Set(JSON.parse(window.localStorage.getItem(SCANNED_PAYLOADS_STORAGE_KEY) || "[]"));
+} catch {
+  window.localStorage.removeItem(SCANNED_PAYLOADS_STORAGE_KEY);
+}
 
 function isUrlLike(value) {
   return /^https?:\/\//i.test(value) || /^[a-z0-9.-]+\.[a-z]{2,}(\/|$)/i.test(value);
@@ -886,17 +894,23 @@ async function initGoogleSignIn() {
   });
 }
 
-function recordScan() {
+function recordScan(payload) {
+  const normalizedPayload = payload.trim();
+  if (scannedPayloads.has(normalizedPayload)) return false;
+
+  scannedPayloads.add(normalizedPayload);
   scanCount += 1;
   window.localStorage.setItem("phishproofScanCount", String(scanCount));
+  window.localStorage.setItem(SCANNED_PAYLOADS_STORAGE_KEY, JSON.stringify(Array.from(scannedPayloads)));
   updateAirdropProgress();
+  return true;
 }
 
 function runAnalysis({ countScan = true } = {}) {
   try {
     dom.scanStatus.textContent = "QR decoded. Classifying payload and running risk checks.";
     const result = analyzePayload(dom.urlInput.value);
-    if (countScan) recordScan();
+    if (countScan) recordScan(result.rawInput);
     renderAnalysis(result);
     window.requestAnimationFrame(() => {
       dom.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
