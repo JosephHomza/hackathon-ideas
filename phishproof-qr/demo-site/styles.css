@@ -336,11 +336,35 @@ body {
   padding: 0;
   overflow: hidden;
   transform-style: preserve-3d;
-  background: radial-gradient(circle at 50% 42%, rgba(103, 242, 200, 0.07), transparent 46%), var(--panel-strong);
+  background:
+    radial-gradient(circle at 52% 36%, rgba(103, 242, 200, 0.16), transparent 38%),
+    radial-gradient(circle at 72% 62%, rgba(90, 140, 255, 0.14), transparent 34%),
+    linear-gradient(160deg, rgba(14, 31, 48, 0.98), rgba(4, 7, 12, 0.98));
+}
+
+.spline-showcase::before,
+.spline-showcase::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spline-showcase::before {
+  opacity: 0.7;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.6px),
+    radial-gradient(circle, rgba(103, 242, 200, 0.55) 0 1px, transparent 1.7px);
+  background-position: 12px 20px, 72px 46px;
+  background-size: 86px 86px, 132px 132px;
+  mask-image: radial-gradient(circle at 52% 44%, black 0 52%, transparent 78%);
 }
 
 .spline-showcase::after {
-  content: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0.08), transparent 32%),
+    radial-gradient(circle at 50% 48%, transparent 0 42%, rgba(0, 0, 0, 0.24) 72%);
 }
 
 .three-scene {
@@ -391,30 +415,84 @@ body {
   display: grid;
   place-items: center;
   perspective: 1100px;
+  opacity: 1;
+  transform: translateZ(0);
+  transition: opacity 0.28s ease;
 }
 
 .device-orbit::before {
   content: "";
   position: absolute;
-  width: 72%;
+  width: 74%;
   aspect-ratio: 1;
-  border: 1px solid rgba(103, 242, 200, 0.2);
+  border: 1px solid rgba(103, 242, 200, 0.28);
   border-radius: 50%;
-  transform: rotateX(68deg);
-  box-shadow: inset 0 0 36px rgba(103, 242, 200, 0.08);
+  transform: rotateX(68deg) translateY(14px);
+  box-shadow:
+    inset 0 0 36px rgba(103, 242, 200, 0.1),
+    0 0 42px rgba(103, 242, 200, 0.1);
+}
+
+.device-orbit::after {
+  content: "";
+  position: absolute;
+  width: 44%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(103, 242, 200, 0.18), transparent 58%),
+    linear-gradient(135deg, rgba(141, 107, 255, 0.2), rgba(31, 214, 163, 0.08));
+  filter: blur(1px);
+  transform: translate3d(42%, -28%, -60px);
 }
 
 .phone-model {
   position: relative;
-  width: min(68%, 300px);
+  z-index: 1;
+  width: min(66%, 292px);
   aspect-ratio: 0.52;
   padding: 22px 18px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(137, 255, 230, 0.32);
   border-radius: 36px;
-  background: linear-gradient(145deg, #111b2b, #05080d);
-  box-shadow: 0 48px 90px rgba(0, 0, 0, 0.45), inset 0 0 0 8px rgba(255, 255, 255, 0.035);
+  background:
+    radial-gradient(circle at 74% 18%, rgba(103, 242, 200, 0.16), transparent 26%),
+    linear-gradient(150deg, #176c70 0%, #0b3444 42%, #050506 100%);
+  box-shadow:
+    0 48px 90px rgba(0, 0, 0, 0.45),
+    0 0 42px rgba(103, 242, 200, 0.12),
+    inset 0 0 0 8px rgba(255, 255, 255, 0.035);
   transform: rotateY(-18deg) rotateX(10deg);
   animation: modelFloat 7s ease-in-out infinite;
+}
+
+.phone-model::before {
+  content: "";
+  position: absolute;
+  right: 20px;
+  bottom: 52px;
+  width: 78px;
+  height: 44px;
+  background:
+    linear-gradient(165deg, transparent 0 18%, rgba(2, 4, 5, 0.82) 18% 38%, transparent 38% 46%, rgba(2, 4, 5, 0.82) 46% 66%, transparent 66% 74%, rgba(2, 4, 5, 0.82) 74%);
+  opacity: 0.72;
+  transform: skewX(-18deg);
+}
+
+.phone-model::after {
+  content: "SEED VAULT";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 58%;
+  padding: 10px 12px;
+  border-radius: 12px 12px 18px 18px;
+  background: rgba(39, 42, 43, 0.82);
+  color: rgba(2, 4, 5, 0.9);
+  font: 900 0.72rem/1 var(--display-font);
+  letter-spacing: 0.16em;
+  text-align: center;
+  transform: translateY(-50%);
+  box-shadow: inset 0 -10px 24px rgba(0, 0, 0, 0.22);
 }
 
 .spline-showcase.is-tilting .phone-model {
@@ -432,19 +510,25 @@ body {
 }
 
 .screen-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 9px;
-  height: 68%;
+  height: 46%;
   padding: 22px;
-  border: 1px solid rgba(103, 242, 200, 0.18);
+  border: 1px solid rgba(103, 242, 200, 0.28);
   border-radius: 24px;
-  background: linear-gradient(160deg, rgba(103, 242, 200, 0.12), rgba(90, 140, 255, 0.14));
+  background:
+    radial-gradient(circle at 50% 40%, rgba(103, 242, 200, 0.18), transparent 62%),
+    linear-gradient(160deg, rgba(103, 242, 200, 0.12), rgba(90, 140, 255, 0.14));
+  box-shadow: inset 0 0 28px rgba(103, 242, 200, 0.08);
 }
 
 .screen-grid span {
   border-radius: 5px;
   background: rgba(237, 244, 255, 0.9);
+  box-shadow: 0 0 10px rgba(237, 244, 255, 0.08);
 }
 
 .screen-grid span:nth-child(4n),
@@ -453,23 +537,27 @@ body {
 }
 
 .screen-verdict {
+  position: relative;
+  z-index: 1;
   margin-top: 18px;
   padding: 12px;
   border-radius: 8px;
-  background: rgba(80, 227, 164, 0.13);
-  border: 1px solid rgba(80, 227, 164, 0.32);
+  background: rgba(80, 227, 164, 0.16);
+  border: 1px solid rgba(80, 227, 164, 0.38);
   color: var(--safe);
   font-family: var(--display-font);
   font-weight: 800;
   text-align: center;
   letter-spacing: 0.08em;
+  box-shadow: 0 0 24px rgba(80, 227, 164, 0.12);
 }
 
 .scan-beam {
   position: absolute;
   width: 76%;
   height: 2px;
-  top: 46%;
+  top: 43%;
+  z-index: 2;
   background: linear-gradient(90deg, transparent, var(--accent), #ffffff, var(--accent), transparent);
   box-shadow: 0 0 28px rgba(103, 242, 200, 0.75);
   animation: showcaseSweep 3.8s ease-in-out infinite;
