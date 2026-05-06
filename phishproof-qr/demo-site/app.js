@@ -11,7 +11,7 @@ const sampleUrls = {
   json: "{\"type\":\"airdrop\",\"ref\":\"SAFE-DEMO\",\"action\":\"open\",\"url\":\"https://bit.ly/3secure-deal\"}"
 };
 
-const GOOGLE_CLIENT_ID = "";
+const GOOGLE_CLIENT_ID = "230684501873-4aauu1triudaaopdcus2k7achvesr3el.apps.googleusercontent.com";
 const BACKEND_BASE_URL = "https://safescan-qr.onrender.com";
 const AIRDROP_REGISTER_ENDPOINT = "";
 const PUBLIC_SITE_URL = "https://josephhomza.github.io/hackathon-ideas/phishproof-qr-demo/";
@@ -83,6 +83,9 @@ const dom = {
   tierThreeCard: document.getElementById("tierThreeCard")
 };
 
+const splineShowcase = document.querySelector(".spline-showcase");
+const splineEmbed = document.getElementById("splineEmbed");
+const safeScanModel = document.getElementById("safeScanModel");
 let lastAnalysis = null;
 let scanCount = Number(window.localStorage.getItem("phishproofScanCount") || "0");
 let scannedPayloads = new Set();
@@ -102,6 +105,41 @@ function normalizeUrl(raw) {
   if (!trimmed) throw new Error("Paste a URL to analyze.");
   if (!/^https?:\/\//i.test(trimmed)) return new URL(`https://${trimmed}`);
   return new URL(trimmed);
+}
+
+function hydrateSplineShowcase() {
+  const sceneUrl = splineShowcase?.dataset.splineSrc?.trim();
+  if (!sceneUrl || !splineEmbed) return;
+
+  const frame = document.createElement("iframe");
+  frame.src = sceneUrl;
+  frame.title = "Interactive SafeScan QR 3D model";
+  frame.loading = "lazy";
+  frame.allow = "autoplay; fullscreen; xr-spatial-tracking";
+  splineEmbed.replaceChildren(frame);
+  splineShowcase.classList.add("spline-loaded");
+}
+
+function bindInteractiveModelTilt() {
+  if (!splineShowcase || !safeScanModel) return;
+
+  const setTilt = (clientX, clientY) => {
+    const rect = splineShowcase.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
+    splineShowcase.classList.add("is-tilting");
+    splineShowcase.style.setProperty("--tilt-y", `${-18 + x * 16}deg`);
+    splineShowcase.style.setProperty("--tilt-x", `${10 - y * 12}deg`);
+    splineShowcase.style.setProperty("--tilt-lift", "-10px");
+  };
+
+  splineShowcase.addEventListener("pointermove", (event) => setTilt(event.clientX, event.clientY));
+  splineShowcase.addEventListener("pointerleave", () => {
+    splineShowcase.classList.remove("is-tilting");
+    splineShowcase.style.removeProperty("--tilt-y");
+    splineShowcase.style.removeProperty("--tilt-x");
+    splineShowcase.style.removeProperty("--tilt-lift");
+  });
 }
 
 function decodeIfNeeded(value) {
@@ -297,6 +335,7 @@ function analyzeUrl(rawValue) {
   return {
     verdict,
     score,
+    rawInput: rawValue,
     urlString,
     redirects,
     reasons,
@@ -392,6 +431,7 @@ function analyzePayload(rawValue) {
   return {
     verdict,
     score,
+    rawInput: rawValue,
     urlString: payload.normalized,
     redirects: actions,
     reasons,
@@ -455,6 +495,91 @@ function renderAnalysis(result) {
 
   if (result.canAutoContinue && dom.autoContinueToggle.checked) {
     dom.recommendedAction.textContent = "Safe mode is enabled, so the app would continue automatically without a second scan.";
+  }
+}
+
+function getScanIdentity() {
+  const profile = getStoredAirdropProfile();
+  return {
+    email: profile?.email || "demo.user@gmail.com",
+    walletAddress: profile?.walletAddress || ""
+  };
+}
+
+function textFromHtml(doc, selector, fallback = "") {
+  return doc.querySelector(selector)?.textContent?.trim() || fallback;
+}
+
+function parseBackendScanHtml(html, rawInput) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const verdictText = textFromHtml(doc, ".results-header h2", "Verdict: Caution");
+  const verdictMatch = verdictText.match(/verdict:\s*([a-z]+)/i);
+  const verdictRaw = verdictMatch?.[1] || textFromHtml(doc, ".verdict-badge", "Caution");
+  const verdict = verdictRaw.charAt(0).toUpperCase() + verdictRaw.slice(1).toLowerCase();
+  const score = Number(textFromHtml(doc, ".score-value", "0")) || 0;
+  const decodedPayload = textFromHtml(doc, ".result-card .mono", rawInput);
+  const threatClass = textFromHtml(doc, ".engine-grid div:nth-child(2) p:last-child", verdict === "Safe" ? "Safe Destination" : "Backend flagged destination");
+  const backendScanCount = doc.querySelector("[data-backend-count]")?.getAttribute("data-backend-count");
+  if (backendScanCount) {
+    scanCount = Math.max(scanCount, Number(backendScanCount) || scanCount);
+    window.localStorage.setItem("phishproofScanCount", String(scanCount));
+    updateAirdropProgress();
+  }
+
+  return {
+    verdict,
+    score,
+    rawInput,
+    urlString: decodedPayload,
+    redirects: [decodedPayload],
+    reasons: [
+      "Checked by the SafeScan QR backend.",
+      "Backend scan used the deployed API at safescan-qr.onrender.com.",
+      walletAddressForReason()
+    ].filter(Boolean),
+    tags: ["Backend scan", verdict === "Safe" ? "Safe Browsing clear" : "Review required"],
+    threatClass,
+    canAutoContinue: verdict === "Safe",
+    recommendedAction: verdict === "Safe"
+      ? "The backend did not flag this destination. You can continue from this screen."
+      : "The backend flagged risk signals. Review the decoded payload before continuing."
+  };
+}
+
+function walletAddressForReason() {
+  const { walletAddress } = getScanIdentity();
+  if (!walletAddress) return "No wallet was attached to this scan.";
+  return `Wallet attached for reward tracking: ${walletAddress}`;
+}
+
+async function scanWithBackend({ manualUrl = "", file = null } = {}) {
+  const { email, walletAddress } = getScanIdentity();
+  const formData = new FormData();
+  formData.append("user_email", email);
+  formData.append("wallet_address", walletAddress);
+  if (manualUrl) formData.append("manual_url", manualUrl);
+  if (file) formData.append("file", file);
+
+  const response = await fetch(`${BACKEND_BASE_URL}/search_qr_api`, {
+    method: "POST",
+    body: formData
+  });
+
+  if (!response.ok) throw new Error("SafeScan backend could not analyze this payload.");
+  const html = await response.text();
+  return parseBackendScanHtml(html, manualUrl || file?.name || "Uploaded QR image");
+}
+
+async function postGoogleCredentialToBackend(credential) {
+  if (!credential) return;
+  try {
+    await fetch(`${BACKEND_BASE_URL}/auth/google`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ credential })
+    });
+  } catch {
+    // The local profile still works even if the backend auth page cannot be read.
   }
 }
 
@@ -813,6 +938,7 @@ async function registerAirdropUser(googleProfile) {
 function handleGoogleCredential(response) {
   try {
     const googleProfile = decodeJwtPayload(response.credential);
+    postGoogleCredentialToBackend(response.credential);
     registerAirdropUser(googleProfile);
   } catch (error) {
     window.alert(error.message);
@@ -906,10 +1032,25 @@ function recordScan(payload) {
   return true;
 }
 
-function runAnalysis({ countScan = true } = {}) {
+async function runAnalysis({ countScan = true, file = null } = {}) {
   try {
-    dom.scanStatus.textContent = "QR decoded. Classifying payload and running risk checks.";
-    const result = analyzePayload(dom.urlInput.value);
+    const manualUrl = dom.urlInput.value.trim();
+    if (!manualUrl && !file) throw new Error("Paste decoded QR text or upload a QR image to analyze.");
+
+    dom.scanStatus.textContent = file
+      ? "QR image sent to the SafeScan backend for decoding."
+      : "QR payload sent to the SafeScan backend for live analysis.";
+
+    let result;
+    try {
+      result = await scanWithBackend({ manualUrl, file });
+      dom.scanStatus.textContent = "Backend scan complete. Rendering SafeScan verdict.";
+    } catch {
+      if (file) throw new Error("The backend could not decode this QR image. Try another photo or paste the decoded URL.");
+      result = analyzePayload(manualUrl);
+      dom.scanStatus.textContent = "Backend unavailable. Showing local demo analysis.";
+    }
+
     if (countScan) recordScan(result.rawInput);
     renderAnalysis(result);
     window.requestAnimationFrame(() => {
@@ -956,7 +1097,8 @@ dom.qrImageInput.addEventListener("change", (event) => {
   reader.onload = () => {
     dom.previewImage.src = reader.result;
     dom.uploadPreview.classList.remove("hidden");
-    dom.scanStatus.textContent = "Camera or photo input received. On a mobile device, the full product would decode the QR directly from this capture flow.";
+    dom.scanStatus.textContent = "Camera or photo input received. Sending it to the SafeScan backend for QR decoding.";
+    runAnalysis({ file });
   };
   reader.readAsDataURL(file);
 });
@@ -1067,4 +1209,6 @@ dom.demoReferralButton.addEventListener("click", () => {
 
 captureIncomingReferral();
 renderAirdropProfile(getStoredAirdropProfile());
+hydrateSplineShowcase();
+bindInteractiveModelTilt();
 window.addEventListener("load", initGoogleSignIn);

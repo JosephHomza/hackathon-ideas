@@ -83,6 +83,9 @@ const dom = {
   tierThreeCard: document.getElementById("tierThreeCard")
 };
 
+const splineShowcase = document.querySelector(".spline-showcase");
+const splineEmbed = document.getElementById("splineEmbed");
+const safeScanModel = document.getElementById("safeScanModel");
 let lastAnalysis = null;
 let scanCount = Number(window.localStorage.getItem("phishproofScanCount") || "0");
 let scannedPayloads = new Set();
@@ -102,6 +105,41 @@ function normalizeUrl(raw) {
   if (!trimmed) throw new Error("Paste a URL to analyze.");
   if (!/^https?:\/\//i.test(trimmed)) return new URL(`https://${trimmed}`);
   return new URL(trimmed);
+}
+
+function hydrateSplineShowcase() {
+  const sceneUrl = splineShowcase?.dataset.splineSrc?.trim();
+  if (!sceneUrl || !splineEmbed) return;
+
+  const frame = document.createElement("iframe");
+  frame.src = sceneUrl;
+  frame.title = "Interactive SafeScan QR 3D model";
+  frame.loading = "lazy";
+  frame.allow = "autoplay; fullscreen; xr-spatial-tracking";
+  splineEmbed.replaceChildren(frame);
+  splineShowcase.classList.add("spline-loaded");
+}
+
+function bindInteractiveModelTilt() {
+  if (!splineShowcase || !safeScanModel) return;
+
+  const setTilt = (clientX, clientY) => {
+    const rect = splineShowcase.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
+    splineShowcase.classList.add("is-tilting");
+    splineShowcase.style.setProperty("--tilt-y", `${-18 + x * 16}deg`);
+    splineShowcase.style.setProperty("--tilt-x", `${10 - y * 12}deg`);
+    splineShowcase.style.setProperty("--tilt-lift", "-10px");
+  };
+
+  splineShowcase.addEventListener("pointermove", (event) => setTilt(event.clientX, event.clientY));
+  splineShowcase.addEventListener("pointerleave", () => {
+    splineShowcase.classList.remove("is-tilting");
+    splineShowcase.style.removeProperty("--tilt-y");
+    splineShowcase.style.removeProperty("--tilt-x");
+    splineShowcase.style.removeProperty("--tilt-lift");
+  });
 }
 
 function decodeIfNeeded(value) {
@@ -1171,4 +1209,6 @@ dom.demoReferralButton.addEventListener("click", () => {
 
 captureIncomingReferral();
 renderAirdropProfile(getStoredAirdropProfile());
+hydrateSplineShowcase();
+bindInteractiveModelTilt();
 window.addEventListener("load", initGoogleSignIn);
