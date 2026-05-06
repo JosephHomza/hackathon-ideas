@@ -77,6 +77,24 @@ body {
   background: rgba(103, 242, 200, 0.08);
 }
 
+.signup-terms {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+.signup-terms a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.signup-terms a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
 .hero,
 .airdrop-panel,
 .scanner-panel,
@@ -1401,9 +1419,16 @@ input[type="text"] {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 240px repeat(4, 1fr);
-  gap: 0 48px;
-  padding: 56px 80px 48px 80px;
+  grid-template-columns: 240px repeat(4, minmax(120px, max-content));
+  justify-content: space-between;
+  column-gap: 48px;
+  width: min(864px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 50px 0 48px;
+}
+
+.footer-col {
+  min-width: 120px;
 }
 
 .footer-brand-name {
@@ -1458,16 +1483,19 @@ input[type="text"] {
 .footer-divider {
   border: none;
   border-top: 1px solid #1e293b;
-  margin: 0 80px;
+  width: min(864px, calc(100% - 48px));
+  margin: 0 auto;
 }
 
 .footer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 80px;
+  width: min(864px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 26px 0 36px;
   font-size: 12px;
-  color: #475569;
+  color: #64748b;
 }
 
 .hidden {
@@ -1519,6 +1547,10 @@ input[type="text"] {
 
   .top-auth {
     justify-content: stretch;
+  }
+
+  .signup-terms {
+    text-align: left;
   }
 
   .google-button,
@@ -1596,6 +1628,8 @@ input[type="text"] {
     flex-direction: column;
     align-items: flex-start;
     padding: 20px 24px;
+    width: auto;
+    margin: 0;
     gap: 6px;
   }
 }

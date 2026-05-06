@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeScan QR Demo</title>
-  <link rel="stylesheet" href="./styles.css?v=safescan-3d-v1">
+  <link rel="stylesheet" href="./styles.css?v=final-site-match-v1">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -37,6 +37,7 @@
         </span>
         <span>Sign in with Google</span>
       </button>
+      <p class="signup-terms">By signing up, you agree to the <a href="https://safescan-qr.onrender.com/legal/terms-of-use">Terms</a> and <a href="https://safescan-qr.onrender.com/legal/privacy-policy">Privacy Policy</a>.</p>
 
       <div id="airdropProfile" class="top-profile hidden">
         <div>
@@ -107,15 +108,10 @@
         </div>
         <h1>SafeScan QR</h1>
         <p class="hero-problem">Can you distinguish a malicious QR?</p>
-        <p class="hero-text">
-          Scan once, inspect the hidden payload, and safely continue without rescanning.
-          This demo shows how a QR safety app can explain links, Wi-Fi joins, contacts,
-          messages, payments, and app actions before anything runs.
-        </p>
+        <p class="hero-text">A trust layer for QR links, wallet prompts, and payment redirects. Decode the payload, score the risk, and keep the user in control before anything runs.</p>
         <div class="hero-actions">
           <a class="primary-button" href="#scanner">Scan QR</a>
           <a class="secondary-button" href="#airdrop">Airdrop</a>
-          <a class="secondary-button" href="#story">Why it matters</a>
         </div>
         <div class="hero-metrics" aria-label="SafeScan QR demo capabilities">
           <div><span>AI</span><p>Risk verdicts</p></div>
@@ -148,25 +144,6 @@
     </header>
 
     <main>
-      <section class="story-grid" id="story">
-        <article class="story-card">
-          <h2>Why this problem matters</h2>
-          <p>Most people cannot tell the difference between a malicious QR code and a safe one before scanning. SafeScan QR reveals the hidden payload first, so unsafe links, Wi-Fi joins, payment requests, and app actions are easier to spot.</p>
-        </article>
-        <article class="story-card">
-          <h2>What makes this different?</h2>
-          <p>Instead of immediately opening or executing a QR action, SafeScan QR explains what the payload wants to do and why it looks safe or suspicious.</p>
-        </article>
-        <article class="story-card">
-          <h2>How does scanning work?</h2>
-          <p>The product is designed around mobile device usage first. In the browser demo, we simulate the scan flow and support camera-based photo capture so the experience feels closer to a real mobile browser.</p>
-        </article>
-        <article class="story-card">
-          <h2>What is the hackathon hook?</h2>
-          <p>It combines a strong cybersecurity story, a visual reveal, and a simple demo flow judges can understand in seconds.</p>
-        </article>
-      </section>
-
       <section class="airdrop-panel" id="airdrop">
         <div class="panel-header">
           <div>
@@ -470,6 +447,6 @@
     </footer>
   </div>
 
-  <script src="./app.js?v=safescan-3d-v1"></script>
+  <script src="./app.js?v=final-site-match-v1"></script>
 </body>
 </html>
