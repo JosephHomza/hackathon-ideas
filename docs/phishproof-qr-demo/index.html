@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeScan QR Demo</title>
-  <link rel="stylesheet" href="./styles.css?v=backend-v1">
+  <link rel="stylesheet" href="./styles.css?v=safescan-main-v1">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -345,7 +345,7 @@
             <ul id="riskReasons" class="reason-list"></ul>
           </article>
 
-          <article class="result-card result-card-wide engine-card">
+          <article id="risk" class="result-card result-card-wide engine-card">
             <div class="engine-header">
               <h3>AI risk engine</h3>
               <p>This panel makes the decision process visible for judges.</p>
@@ -383,6 +383,74 @@
         </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <section class="footer-newsletter" aria-labelledby="footerNewsletterTitle">
+        <h2 id="footerNewsletterTitle">Stay in the loop</h2>
+        <p>One tight email when SafeScan ships mobile beta, Solana dApp Store updates, and new risk-engine releases. No sales spam.</p>
+        <form class="footer-newsletter-form" action="https://safescan-qr.onrender.com/waitlist" method="post">
+          <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
+          <button type="submit">Notify me</button>
+        </form>
+        <p class="footer-newsletter-note">One email per major release; privacy &middot; terms &middot; unsubscribe in one click any time.</p>
+      </section>
+
+      <hr class="footer-divider footer-divider-wide">
+
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-brand-name">SafeScan QR</span>
+          <p class="footer-brand-desc">mobile-first QR, wallet, and payment safety for Solana users. Built for scan-before-you-sign security.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-header">Product</h4>
+          <ul class="footer-links">
+            <li><a href="#scanner">Scan QR</a></li>
+            <li><a href="#airdrop">Airdrop</a></li>
+            <li><a href="#risk">Risk Engine</a></li>
+            <li><a href="https://safescan-qr.onrender.com/legal/data-request">Data Request</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-header">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="https://safescan-qr.onrender.com/legal/privacy-policy">Privacy Policy</a></li>
+            <li><a href="https://safescan-qr.onrender.com/legal/cookie-policy">Cookie Policy</a></li>
+            <li><a href="https://safescan-qr.onrender.com/changelog">Changelog</a></li>
+            <li><a href="https://safescan-qr.onrender.com/legal/data-request">Compliance</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-header">Community</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/JosephHomza/hackathon-ideas">GitHub</a></li>
+            <li><a href="https://colosseum.org">Colosseum</a></li>
+            <li><a href="https://x.com" rel="noopener noreferrer">X (Twitter)</a></li>
+            <li><a href="https://linkedin.com" rel="noopener noreferrer">LinkedIn</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-header">Company</h4>
+          <ul class="footer-links">
+            <li><a href="https://safescan-qr.onrender.com/legal/terms-of-use">Terms</a></li>
+            <li><a href="https://safescan-qr.onrender.com/legal/privacy-policy">Privacy</a></li>
+            <li><a href="https://safescan-qr.onrender.com/legal/data-request">Do Not Sell or Share</a></li>
+            <li><a href="mailto:privacy@safescan-qr.onrender.com">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 SafeScan QR. All rights reserved.</span>
+        <span>Terms v1.0 &middot; Updated May 2026</span>
+      </div>
+    </footer>
   </div>
 
   <script src="./app.js?v=backend-v1"></script>
